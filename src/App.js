@@ -38,7 +38,14 @@ export default function App() {
 				<div
 					className="bg-blue-200"
 					style={{ height: y }}
-				/>
+				>
+
+					<div className="relative h-full">
+						<div className="p-2 absolute bottom-0 right-0">
+							({x.toFixed(0)}, {y.toFixed(0)})
+						</div>
+					</div>
+				</div>
 			</div>
 
 			{/* Debug */}
