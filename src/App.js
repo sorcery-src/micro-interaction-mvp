@@ -27,25 +27,37 @@ const methods = state => ({
 			// No-op
 			return
 		}
-		// state.activeElement = null
+
+		let offset = 0
+		if (state.elements.length) {
+			offset = state.elements.reduce((acc, each) => acc + each.styles.height, 0)
+		}
+		console.log({ y: state.pointer.y, offset })
+
 		state.elements.push({
 			uuid: uuidv4(),
 			parent: null,
 			styles: {
 				display: "block",
 				width: "100%",
-				height: state.pointer.y,
+				height: state.pointer.y - offset,
 			},
 		})
 	},
 	setPointerRawXY({ rawX, rawY }) {
 		const x = Math.round(rawX)
 		const y = Math.round(rawY)
-		if (state.pointer.down && state.elements.length) {
-			state.elements[state.elements.length - 1].styles.height = y
-		}
+
 		state.pointer.x = x
 		state.pointer.y = y
+
+		if (state.pointer.down && state.elements.length) {
+			// let offset = 0
+			// if (state.elements.length > 1) {
+			// 	offset = state.elements.reduce((acc, each) => acc + each.styles.height, 0)
+			// }
+			state.elements[state.elements.length - 1].styles.height = y // - offset
+		}
 	},
 })
 
