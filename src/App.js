@@ -44,7 +44,7 @@ const methods = state => ({
 			styles: {
 				display: "block",
 				width: "100%",
-				height: state.pointer.y - offset,
+				height: Math.max(0, state.pointer.y - offset),
 			},
 		})
 	},
@@ -61,13 +61,12 @@ const methods = state => ({
 			const offset = state.elements.slice(0, state.elements.length - 1).reduce((acc, each) => {
 				return acc + each.styles.height
 			}, 0)
-			state.elements[state.elements.length - 1].styles.height = y - offset
+			state.elements[state.elements.length - 1].styles.height = Math.max(0, y - offset)
 
 		}
 	},
 })
 
-/* eslint-disable */
 export default function App() {
 	useLayoutClear()
 
@@ -78,7 +77,7 @@ export default function App() {
 
 			<div
 				className="bg-blue-100 min-h-screen"
-				onPointerDown={e => {
+				onPointerDown={() => {
 					dispatch.setPointerDown(true)
 				}}
 				onPointerUp={() => {
