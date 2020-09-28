@@ -20,8 +20,10 @@ export default function App() {
 
 			<div
 				className="bg-blue-100 min-h-screen"
-				onPointerDown={() => {
+				onPointerDown={e => {
 					pointerDownRef.current = true
+					setX(Math.round(e.clientX))
+					setY(Math.round(e.clientY))
 				}}
 				onPointerUp={() => {
 					pointerDownRef.current = false
