@@ -25,7 +25,7 @@ const methods = state => ({
 	setPointerCoords({ x, y }) {
 		state.pointer.x = Math.round(x)
 		state.pointer.y = Math.round(y)
-	}
+	},
 })
 
 /* eslint-disable */
@@ -33,13 +33,6 @@ export default function App() {
 	useLayoutClear()
 
 	const [state, dispatch] = useMethods(methods, initialState)
-
-	// const update = React.useMemo(() => {
-	// 	return replace => setState(current => ({
-	// 		...current,
-	// 		...replace,
-	// 	}))
-	// }, [setState])
 
 	return (
 		<>
@@ -59,19 +52,22 @@ export default function App() {
 					})
 				}}
 			>
-				<div
-					className="bg-blue-200"
-					// style={{ height: y }}
-				>
 
-					<div className="relative h-full">
-						<div className="p-2 absolute bottom-0 right-0">
-							<p className="font-mono text-sm tabular-nums">
-								{/* ({x}, {y}) */}
-							</p>
+				{state.pointer.down && (
+					<div
+						className="bg-blue-200"
+						style={{ height: state.pointer.y }}
+					>
+						<div className="relative h-full">
+							<div className="p-2 absolute bottom-0 right-0">
+								<p className="font-mono text-sm tabular-nums">
+									({state.pointer.x}, {state.pointer.y})
+								</p>
+							</div>
 						</div>
 					</div>
-				</div>
+				)}
+
 			</div>
 
 			{/* Debug */}
