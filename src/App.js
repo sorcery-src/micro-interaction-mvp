@@ -21,6 +21,18 @@ const initialState = {
 const methods = state => ({
 	setPointerDown(down) {
 		state.pointer.down = down
+		if (down) {
+			// No-op
+			return
+		}
+		state.elements.push({
+			parent: null,
+			styles: {
+				display: "block",
+				width: "100%",
+				height: state.pointer.y,
+			},
+		})
 	},
 	setPointerCoords({ x, y }) {
 		state.pointer.x = Math.round(x)
@@ -53,6 +65,7 @@ export default function App() {
 				}}
 			>
 
+				{/* Virtual element */}
 				{state.pointer.down && (
 					<div
 						className="bg-blue-200"
