@@ -5,7 +5,8 @@
 	"dependencies": {
 		"react": "^17.0.0-rc.2",
 		"react-dom": "^17.0.0-rc.2",
-		"react-scripts": "^4.0.0-next.98"
+		"react-scripts": "^4.0.0-next.98",
+		"use-methods": "^0.5.1"
 	},
 	"scripts": {
 		"tw-dev": "tailwind build -o src/stylesheets/tailwind/out.css",

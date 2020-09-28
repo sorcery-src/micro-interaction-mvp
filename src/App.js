@@ -1,4 +1,5 @@
 import * as React from "react"
+import useMethods from "use-methods"
 
 function useLayoutClear() {
 	React.useLayoutEffect(() => {
@@ -8,25 +9,37 @@ function useLayoutClear() {
 	}, [])
 }
 
+const initialState = {
+	pointer: {
+		down: false,
+		x: 0,
+		y: 0,
+	},
+	elements: [],
+}
+
+const methods = state => ({
+	setPointerDown(down) {
+		state.pointer.down = down
+	},
+	setPointerCoords({ x, y }) {
+		state.pointer.x = Math.round(x)
+		state.pointer.y = Math.round(y)
+	}
+})
+
 /* eslint-disable */
 export default function App() {
 	useLayoutClear()
 
-	const [state, setState] = React.useState({
-		pointerCoords: {
-			x: 0,
-			y: 0,
-		},
-		pointerDown: false,
-		elements: [],
-	})
+	const [state, dispatch] = useMethods(methods, initialState)
 
-	const update = React.useMemo(() => {
-		return replace => setState(current => ({
-			...current,
-			...replace,
-		}))
-	}, [setState])
+	// const update = React.useMemo(() => {
+	// 	return replace => setState(current => ({
+	// 		...current,
+	// 		...replace,
+	// 	}))
+	// }, [setState])
 
 	return (
 		<>
@@ -34,15 +47,15 @@ export default function App() {
 			<div
 				className="bg-blue-100 min-h-screen"
 				onPointerDown={e => {
-					update({ pointerDown: true })
+					dispatch.setPointerDown(true)
 				}}
 				onPointerUp={() => {
-					update({ pointerDown: false })
+					dispatch.setPointerDown(false)
 				}}
 				onPointerMove={e => {
-					update({
-						x: Math.round(e.clientX),
-						y: Math.round(e.clientY),
+					dispatch.setPointerCoords({
+						x: e.clientX,
+						y: e.clientY,
 					})
 				}}
 			>
