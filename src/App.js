@@ -31,8 +31,8 @@ export default function App() {
 						// No-op
 						return
 					}
-					setX(e.clientX)
-					setY(e.clientY)
+					setX(Math.round(e.clientX))
+					setY(Math.round(e.clientY))
 				}}
 			>
 				<div
@@ -42,7 +42,7 @@ export default function App() {
 
 					<div className="relative h-full">
 						<div className="p-2 absolute bottom-0 right-0">
-							({x.toFixed(0)}, {y.toFixed(0)})
+							({x}, {y})
 						</div>
 					</div>
 				</div>
@@ -51,7 +51,7 @@ export default function App() {
 			{/* Debug */}
 			<div className="p-2 fixed bottom-0 right-0">
 				<p className="font-mono text-sm tabular-nums">
-					({x.toFixed(0)}, {y.toFixed(0)})
+					({x}, {y})
 				</p>
 			</div>
 
