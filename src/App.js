@@ -1,5 +1,6 @@
 import * as React from "react"
 import useMethods from "use-methods"
+import { v4 as uuidv4 } from "uuid"
 
 function useLayoutClear() {
 	React.useLayoutEffect(() => {
@@ -15,17 +16,20 @@ const initialState = {
 		x: 0,
 		y: 0,
 	},
+	activeElement: null,
 	elements: [],
 }
 
 const methods = state => ({
 	setPointerDown(down) {
 		state.pointer.down = down
-		if (down) {
+		if (!down) {
 			// No-op
 			return
 		}
+		// state.activeElement = null
 		state.elements.push({
+			uuid: uuidv4(),
 			parent: null,
 			styles: {
 				display: "block",
@@ -34,9 +38,14 @@ const methods = state => ({
 			},
 		})
 	},
-	setPointerCoords({ x, y }) {
-		state.pointer.x = Math.round(x)
-		state.pointer.y = Math.round(y)
+	setPointerRawXY({ rawX, rawY }) {
+		const x = Math.round(rawX)
+		const y = Math.round(rawY)
+		if (state.pointer.down && state.elements.length) {
+			state.elements[state.elements.length - 1].styles.height = y
+		}
+		state.pointer.x = x
+		state.pointer.y = y
 	},
 })
 
@@ -58,32 +67,32 @@ export default function App() {
 					dispatch.setPointerDown(false)
 				}}
 				onPointerMove={e => {
-					dispatch.setPointerCoords({
-						x: e.clientX,
-						y: e.clientY,
+					dispatch.setPointerRawXY({
+						rawX: e.clientX,
+						rawY: e.clientY,
 					})
 				}}
 			>
 
-				{/* Virtual element */}
-				{state.pointer.down && (
+				{state.elements.map(each => (
 					<div
-						className="bg-blue-200"
-						style={{ height: state.pointer.y }}
+						key={each.uuid}
+						className="bg-blue-200" // DEBUG
+						style={each.styles}
 					>
 						<div className="relative h-full">
 							<div className="p-2 absolute bottom-0 right-0">
 								<p className="font-mono text-sm tabular-nums">
-									({state.pointer.x}, {state.pointer.y})
+									({each.styles.width}, {each.styles.height + "px"})
 								</p>
 							</div>
 						</div>
 					</div>
-				)}
+				))}
 
 			</div>
 
-			{/* Debug */}
+			{/* DEBUG */}
 			<div className="p-2 fixed bottom-0 left-0">
 				<p className="whitespace-pre font-mono text-sm tabular-nums">
 					{JSON.stringify(state, null, 2)}
