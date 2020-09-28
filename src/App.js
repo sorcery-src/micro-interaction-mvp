@@ -28,15 +28,19 @@ const methods = state => ({
 			return
 		}
 
+		// Compute the offset from up to n previous elements:
 		let offset = 0
 		if (state.elements.length) {
-			offset = state.elements.reduce((acc, each) => acc + each.styles.height, 0)
+			offset = state.elements.reduce((acc, each) => {
+				return acc + each.styles.height
+			}, 0)
 		}
-		console.log({ y: state.pointer.y, offset })
 
 		state.elements.push({
 			uuid: uuidv4(),
-			parent: null,
+			parentElement: null,          // TODO
+			previousElementSibling: null, // TODO
+			nextElementSibling: null,     // TODO
 			styles: {
 				display: "block",
 				width: "100%",
@@ -52,11 +56,13 @@ const methods = state => ({
 		state.pointer.y = y
 
 		if (state.pointer.down && state.elements.length) {
-			// let offset = 0
-			// if (state.elements.length > 1) {
-			// 	offset = state.elements.reduce((acc, each) => acc + each.styles.height, 0)
-			// }
-			state.elements[state.elements.length - 1].styles.height = y // - offset
+
+			// Compute the offset from up to n - 1 previous elements:
+			const offset = state.elements.slice(0, state.elements.length - 1).reduce((acc, each) => {
+				return acc + each.styles.height
+			}, 0)
+			state.elements[state.elements.length - 1].styles.height = y - offset
+
 		}
 	},
 })
