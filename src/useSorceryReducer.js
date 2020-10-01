@@ -5,6 +5,24 @@ const methods = state => ({
 	handlePointerDown() {
 		state.pointer.down = true
 
+		const height = state.pointer.y - 6 - 6 / 2 // - offset
+		if (!state.activeElement) {
+			state.activeElement = {
+				id: uuidv4().slice(0, 6),
+				focusState: {
+					element: true,
+					handleBar: true,
+				},
+				focused: false, // TODO: Deprecate
+				style: {
+					display: "block",
+					width: "100%",
+					maxWidth: "100%",
+					height,
+				},
+			}
+		}
+
 		// let offset = 0
 		// if (state.elements.length > 0) {
 		// 	offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
@@ -48,18 +66,20 @@ const methods = state => ({
 
 	handlePointerUp() {
 		state.pointer.down = false
-		// state.activeElement.focused = false
+		// this.blurActiveElement()
 	},
 
 	focusActiveElement() {
 		state.activeElement.focusState.element = true
 	},
+	blurActiveElement() {
+		state.activeElement.focusState.element = true
+		this.blurActiveElementHandleBar()
+	},
 	focusActiveElementHandleBar() {
-		// state.activeElement.focusState.element = true // TODO
 		state.activeElement.focusState.handleBar = true
 	},
-	blurActiveElement() {
-		state.activeElement.focusState.element = false
+	blurActiveElementHandleBar() {
 		state.activeElement.focusState.handleBar = false
 	},
 
@@ -74,20 +94,7 @@ const initialState = {
 		x: 0,
 		y: 0,
 	},
-	activeElement: {
-		id: uuidv4().slice(0, 6),
-		focusState: {
-			element: false,
-			handleBar: false,
-		},
-		focused: false, // TODO: Deprecate
-		style: {
-			display: "block",
-			width: "100%",
-			maxWidth: "100%",
-			height: 400,
-		},
-	},
+	activeElement: null,
 	// elements: [],
 }
 

@@ -53,6 +53,44 @@ const handleBarID = newID()
 export default function App() {
 	const [state, actions] = useSorceryReducer()
 
+	// // Connects state.activeElement.focusState.element.
+	// React.useEffect(() => {
+	// 	if (!state.activeElement) {
+	// 		// No-op
+	// 		return
+	// 	}
+	// 	const id = setTimeout(() => {
+	// 		const element = document.querySelector("[class^='activeElement']")
+	// 		if (state.activeElement.focusState.element) {
+	// 			element.focus()
+	// 		} else {
+	// 			element.blur()
+	// 		}
+	// 	}, 0)
+	// 	return () => {
+	// 		clearTimeout(id)
+	// 	}
+	// }, [state.activeElement])
+
+	// Connects state.activeElement.focusState.handleBar.
+	React.useEffect(() => {
+		if (!state.activeElement) {
+			// No-op
+			return
+		}
+		const id = setTimeout(() => {
+			const element = document.querySelector("[class^='handleBarHitArea']")
+			if (state.activeElement.focusState.handleBar) {
+				element.focus()
+			} else {
+				element.blur()
+			}
+		}, 0)
+		return () => {
+			clearTimeout(id)
+		}
+	}, [state.activeElement])
+
 	return (
 		<div
 			style={{ height: "100vh" }}
@@ -72,13 +110,13 @@ export default function App() {
 							.activeElement__${activeElementID}:focus {
 								outline: none;
 							}
-							.activeElement__${activeElementID}[data-focused="false"] {
+							.activeElement__${activeElementID}[data-focus="false"] {
 								background-color: hsl(${3.25 * 60}, 100%, 90%);
 								transition-property: background-color;
 								transition-duration: 100ms;
 								transition-timing-function: ease-out;
 							}
-							.activeElement__${activeElementID}[data-focused="true"] {
+							.activeElement__${activeElementID}[data-focus="true"] {
 								background-color: hsl(${3.25 * 60}, 100%, 75%);
 								transition-property: background-color;
 								transition-duration: 50ms;
@@ -101,7 +139,7 @@ export default function App() {
 								actions.keyDownDeleteActiveElement()
 							}
 						}}
-						data-focused={state.activeElement.focusState.element}
+						data-focus={state.activeElement.focusState.element}
 						tabIndex={0}
 					>
 						<div style={{ position: "relative", height: "100%" }}>
@@ -155,8 +193,8 @@ export default function App() {
 												border-radius: 9999px;
 												background-color: hsl(${3.25 * 60}, 100%, 90%);
 											}
-											.handleBarHitArea__${handleBarID}:focus .handleBar__${handleBarID} {
-												background-color: hsl(${3.25 * 60}, 100%, 75%);
+											.handleBarHitArea__${handleBarID}[data-focus="true"] .handleBar__${handleBarID} {
+												background-color: hsl(${3.25 * 60}, 100%, 80%);
 											}
 										`}
 									</CSS>
@@ -165,7 +203,8 @@ export default function App() {
 										<div
 											className={`handleBarHitArea__${handleBarID}`}
 											onFocus={actions.focusActiveElementHandleBar}
-											onBlur={actions.focusActiveElement}
+											onBlur={actions.blurActiveElementHandleBar}
+											data-focus={state.activeElement.focusState.handleBar}
 											tabIndex={0}
 										>
 											<div className={`handleBar__${handleBarID}`} />
