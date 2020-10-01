@@ -1,10 +1,6 @@
 import useMethods from "use-methods"
 import { v4 as uuidv4 } from "uuid"
 
-// function quantize(number) {
-// 	return Math.floor(number / 2)
-// }
-
 const methods = state => ({
 	handlePointerDown() {
 		state.pointer.active = true
@@ -17,7 +13,6 @@ const methods = state => ({
 					element: true,
 					handleBar: true,
 				},
-				focused: false, // TODO: Deprecate
 				style: {
 					display: "block",
 					width: "100%",
@@ -115,12 +110,8 @@ const methods = state => ({
 	keyDownShift() {
 		state.keys.shift = true
 	},
-	// keyDownAlt() {
-	// 	state.keys.alt = true
-	// },
 	keyUp() {
 		state.keys.shift = false
-		// state.keys.alt = false
 	},
 
 	keyDownDeleteActiveElement() {
@@ -136,7 +127,6 @@ const initialState = {
 	},
 	keys: {
 		shift: false,
-		// alt: false,
 	},
 	activeElement: null,
 	// elements: [],
