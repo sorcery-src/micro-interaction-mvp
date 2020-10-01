@@ -2,8 +2,8 @@
 
 - [x] Can we create an element?
 - [x] Can we create _many_ elements?
-- [ ] Can we select an element?
-- [ ] Can we resize an element?
+- [x] Can we select an element?
+- [x] Can we resize an element?
 - [ ] Can we delete an element?
 - [ ] Can we use discretized units for resizing? (e.g. active during `shift`)
 - [ ] Can we show hints for 100% height? (e.g. snap to edge)
