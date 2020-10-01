@@ -1,3 +1,25 @@
+# v0.1 features
+
+- [x] Can we create an element?
+- [x] Can we create _many_ elements?
+- [ ] Can we select an element?
+- [ ] Can we resize an element?
+- [ ] Can we delete an element?
+- [ ] Can we use discretized units for resizing? (e.g. active during `shift`)
+- [ ] Can we show hints for 100% height? (e.g. snap to edge)
+- [ ] Can we show error messages for things like negative height? (e.g. toast UIs)
+- [ ] Can we add a history stack? (e.g. undo, redo)
+- [ ] Can we persist to localStorage?
+- [ ] Can we export a `.sorcery` file to disk? (e.g. bind `ctrl-s`)
+- [ ] Can we import a `.sorcery` file from disk? (e.g. bind `ctrl-i`)
+- [ ] Can we export to HTML? (e.g.a copy-to-clipboard textarea)
+- [ ] Can we export to React.js?
+- [ ] Can we export to CSS?
+- [ ] Can we export to Sass?
+- [ ] Can we change an element’s background color?
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
