@@ -53,6 +53,49 @@ const handleBarID = newID()
 export default function App() {
 	const [state, actions] = useSorceryReducer()
 
+	// Manages key down.
+	React.useEffect(() => {
+		const handler = e => {
+			if (e.key === "Shift" || e.keyCode === 16 || e.shiftKey) {
+				actions.keyDownShift()
+			} else if (e.key === "Backspace" || e.keyCode === 8) {
+				actions.keyDownDelete()
+			}
+		}
+		document.addEventListener("keydown", handler)
+		return () => {
+			document.removeEventListener("keydown", handler)
+		}
+	}, [actions])
+
+	// Manages key up.
+	React.useEffect(() => {
+		document.addEventListener("keyup", actions.keyUp)
+		return () => {
+			document.removeEventListener("keyup", actions.keyUp)
+		}
+	}, [actions])
+
+	const dep = state.activeElement && state.activeElement.focusState.handleBar
+	React.useEffect(
+		React.useCallback(() => {
+			const id = setTimeout(() => {
+				const element = document.querySelector("[class^='handleBarFocusable']")
+				if (element) {
+					if (state.activeElement.focusState.handleBar) {
+						element.focus()
+					} else {
+						element.blur()
+					}
+				}
+			}, 0)
+			return () => {
+				clearTimeout(id)
+			}
+		}, [state]),
+		[dep],
+	)
+
 	return (
 		<div
 			style={{ height: "100vh" }}
@@ -72,13 +115,13 @@ export default function App() {
 							.activeElement__${activeElementID}:focus {
 								outline: none;
 							}
-							.activeElement__${activeElementID}[data-focused="false"] {
+							.activeElement__${activeElementID}[data-focus="false"] {
 								background-color: hsl(${3.25 * 60}, 100%, 90%);
 								transition-property: background-color;
 								transition-duration: 100ms;
 								transition-timing-function: ease-out;
 							}
-							.activeElement__${activeElementID}[data-focused="true"] {
+							.activeElement__${activeElementID}[data-focus="true"] {
 								background-color: hsl(${3.25 * 60}, 100%, 75%);
 								transition-property: background-color;
 								transition-duration: 50ms;
@@ -96,12 +139,17 @@ export default function App() {
 								actions.blurActiveElement()
 							}
 						}}
-						onKeyDown={e => {
-							if (e.key === "Backspace" || e.keyCode === 8) {
-								actions.keyDownDeleteActiveElement()
-							}
-						}}
-						data-focused={state.activeElement.focusState.element}
+						// onKeyDown={e => {
+						// 	if (e.key === "Shift" || e.keyCode === 16) {
+						// 		actions.keyDownShift()
+						// 	} else if (e.key === "Alt" || e.keyCode === 18) {
+						// 		actions.keyDownAlt()
+						// 	} else if (e.key === "Backspace" || e.keyCode === 8) {
+						// 		actions.keyDownDelete()
+						// 	}
+						// }}
+						// onKeyUp={actions.keyUpActiveElement}
+						data-focus={state.activeElement.focusState.element}
 						tabIndex={0}
 					>
 						<div style={{ position: "relative", height: "100%" }}>
@@ -112,19 +160,23 @@ export default function App() {
 									.debugAbsoluteContext__${handleBarDebugID} {
 										padding-top: ${px(8)};
 										padding-right: ${px(8)};
+										padding-bottom: ${px(8)};
+										padding-left: ${px(8)};
 										position: absolute;
+										top: ${state.activeElement.style.height < 24 ? "100%" : "auto"};
 										right: 0;
-										bottom: 0;
+										/* NOTE: "0" must be a string (why?). */
+										bottom: ${state.activeElement.style.height < 24 ? "auto" : "0"};
 										user-select: none;
 									}
 									.debug__${handleBarDebugID} {
-										font-size: ${px(14)};
+										font-family: monospace;
 									}
 								`}
 							</CSS>
 
 							<div className={`debugAbsoluteContext__${handleBarDebugID}`}>
-								<pre className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</pre>
+								<div className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</div>
 							</div>
 
 							{state.activeElement.focusState.element && (
@@ -140,13 +192,13 @@ export default function App() {
 												justify-content: center;
 												align-items: center;
 											}
-											.handleBarHitArea__${handleBarID} {
+											.handleBarFocusable__${handleBarID} {
 												padding-top: ${px(6)};
 												padding-right: ${px(6)};
 												padding-bottom: ${px(6)};
 												padding-left: ${px(6)};
 											}
-											.handleBarHitArea__${handleBarID}:focus {
+											.handleBarFocusable__${handleBarID}:focus {
 												outline: none;
 											}
 											.handleBar__${handleBarID} {
@@ -155,17 +207,18 @@ export default function App() {
 												border-radius: 9999px;
 												background-color: hsl(${3.25 * 60}, 100%, 90%);
 											}
-											.handleBarHitArea__${handleBarID}:focus .handleBar__${handleBarID} {
-												background-color: hsl(${3.25 * 60}, 100%, 75%);
+											.handleBarFocusable__${handleBarID}[data-focus="true"] .handleBar__${handleBarID} {
+												background-color: hsl(${3.25 * 60}, 100%, 80%);
 											}
 										`}
 									</CSS>
 
 									<div className={`handleBarAbsoluteContext__${handleBarID}`}>
 										<div
-											className={`handleBarHitArea__${handleBarID}`}
+											className={`handleBarFocusable__${handleBarID}`}
 											onFocus={actions.focusActiveElementHandleBar}
-											onBlur={actions.focusActiveElement}
+											onBlur={actions.blurActiveElementHandleBar}
+											data-focus={state.activeElement.focusState.handleBar}
 											tabIndex={0}
 										>
 											<div className={`handleBar__${handleBarID}`} />
