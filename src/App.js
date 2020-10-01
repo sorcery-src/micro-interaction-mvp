@@ -1,17 +1,12 @@
 /* eslint-disable */
 
 import * as React from "react"
+import CSS from "./CSS" // FIXME
 import css from "tpl"
-import Style from "Style"
-// import useOnceID from "useOnceID"
+import px from "px"
 import { v4 as uuidv4 } from "uuid"
 
 /****/
-
-function px(n) {
-	const rem = n / 16
-	return rem + "rem"
-}
 
 function newID(desc) {
 	return (!desc ? "" : desc + "__") + uuidv4().slice(0, 6)
@@ -24,7 +19,7 @@ const debugID = newID()
 function Debug({ debug }) {
 	return (
 		<>
-			<Style id={debugID}>
+			<CSS id={debugID}>
 				{css`
 					.debug-absolute__${debugID} {
 						padding-top: ${px(12)};
@@ -40,7 +35,7 @@ function Debug({ debug }) {
 						font-size: ${px(14)};
 					}
 				`}
-			</Style>
+			</CSS>
 
 			<div className={`debug-absolute__${debugID}`}>
 				<pre className={`debug-absolute-pre__${debugID}`}>{JSON.stringify(debug, null, 2)}</pre>
@@ -71,13 +66,13 @@ export default function App() {
 		<>
 			{/**/}
 
-			<Style id={screenID}>
+			<CSS id={screenID}>
 				{css`
 					.screen__${screenID} {
 						height: 100vh;
 					}
 				`}
-			</Style>
+			</CSS>
 
 			<div
 				className={`screen__${screenID}`}
@@ -102,11 +97,11 @@ export default function App() {
 
 				{state.down && (
 					<>
-						<Style id={rectID}>
+						<CSS id={rectID}>
 							{css`
 								.rect__${rectID} {
 									position: relative;
-									height: ${!state.down ? "auto" : `calc(${px(state.y)} - ${px(8)} - ${px(10 / 2)})`};
+									height: ${!state.down ? "auto" : `calc(${px(state.y)} - ${px(8)} - ${px(8 / 2)})`};
 									background-color: hsl(${3.25 * 60}, 100%, 90%);
 								}
 								.rect-absolute__${rectID} {
@@ -120,22 +115,24 @@ export default function App() {
 									align-items: center;
 								}
 								.rect-absolute-handle__${rectID} {
-									width: ${px(80)};
-									height: ${px(10)};
+									width: ${px(72)};
+									height: ${px(8)};
 									background-color: hsl(${3.25 * 60}, 100%, 90%);
 									border-radius: 9999px;
-									transition-property: background-color;
+									transform: scale(1);
+									transition-property: transform, background-color;
 									transition-duration: 100ms;
 									transition-timing-function: ease-out;
 								}
 								.rect-absolute-handle__${rectID}:hover {
 									background-color: hsl(${3.25 * 60}, 100%, 75%);
-									transition-property: background-color;
+									transform: scale(1.1);
+									transition-property: transform, background-color;
 									transition-duration: 100ms;
 									transition-timing-function: ease-out;
 								}
 							`}
-						</Style>
+						</CSS>
 
 						<div className={`rect__${rectID}`}>
 							<div className={`rect-absolute__${rectID}`}>

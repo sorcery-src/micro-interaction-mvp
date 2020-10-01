@@ -1,7 +1,7 @@
 import detab from "detab"
 import { useLayoutEffect } from "react"
 
-// <Style> renders a <style> element once.
+// <CSS> manually renders a <style> element once.
 //
 // Ex:
 //
@@ -11,17 +11,17 @@ import { useLayoutEffect } from "react"
 //   }, [])
 //
 //   return (
-//     <Style id={id}>
+//     <CSS id={id}>
 //       {css`
 //         ...
 //       `}
-//     </Style>
+//     </CSS>
 //   )
 // }
 //
-export default function Style({ id, children: css }) {
+export default function CSS({ id, children: css }) {
 	if (typeof id !== "string" || id === "") {
-		const errorMessage = "<Style>: Did you forget an ID prop? Try <Style id={<string>}>."
+		const errorMessage = "<CSS>: Did you forget an ID prop? Try <CSS id={<string>}>."
 		throw new Error(errorMessage)
 	}
 

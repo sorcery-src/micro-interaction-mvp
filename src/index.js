@@ -1,9 +1,7 @@
-import App from "./App"
+import App from "App"
+import React from "react"
 import ReactDOM from "react-dom"
 
-import "stylesheets/tailwind/out.css"
+import "normalize.css"
 
-ReactDOM.render(
-	<App />,
-	document.getElementById("root"),
-)
+ReactDOM.render(<App />, document.getElementById("root"))
