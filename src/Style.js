@@ -1,6 +1,23 @@
-// <Style> renders a CSS string once.
-function Style({ id: uuid, children: css }) {
-	// Guards:
+// <Style> renders a <style> element once.
+//
+// Ex:
+//
+// function Component() {
+//   const id = React.useMemo(() => {
+//     return uuidv4()
+//   }, [])
+//
+//   return (
+//     <Style id={id}>
+//       {css`
+//         ...
+//       `}
+//     </Style>
+//   )
+// }
+//
+export default function Style({ id, children: css }) {
+	// Guard:
 	if (typeof id !== "string" || id === "") {
 		const errorMessage = "<Style>: Did you forget an ID prop? Try <Style id={<string>}>."
 		throw new Error(errorMessage)
@@ -11,5 +28,5 @@ function Style({ id: uuid, children: css }) {
 		return null
 	}
 	// Render:
-	return <style id={uuid}>{css}</style>
+	return <style id={id}>{css}</style>
 }
