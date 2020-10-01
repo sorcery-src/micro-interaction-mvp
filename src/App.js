@@ -96,6 +96,11 @@ export default function App() {
 								actions.blurActiveElement()
 							}
 						}}
+						onKeyDown={e => {
+							if (e.key === "Backspace" || e.keyCode === 8) {
+								actions.keyDownDeleteActiveElement()
+							}
+						}}
 						data-focused={state.activeElement.focusState.element}
 						tabIndex={0}
 					>

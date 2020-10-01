@@ -62,10 +62,10 @@ const methods = state => ({
 		state.activeElement.focusState.element = false
 		state.activeElement.focusState.handleBar = false
 	},
-	// blurActiveElementHandleBar() {
-	// 	state.activeElement.focusState.element = false
-	// 	state.activeElement.focusState.handleBar = false
-	// },
+
+	keyDownDeleteActiveElement() {
+		state.activeElement = null
+	},
 })
 
 const initialState = {
