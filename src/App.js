@@ -3,63 +3,56 @@
 import * as React from "react"
 import css from "tpl"
 import Style from "Style"
-import useOnceID from "useOnceID"
+import { v4 as uuidv4 } from "uuid"
 
-// function Rect({ children, ...props }) {
-// 	const rectID = useOnceID()
-//
-// 	return (
-// 		<>
-// 			<Style id={rectID}>
-// 				{css`
-// 					.rect__${rectID} {
-// 						background-color: hsl(${3.25 * 60}, 100%, 90%);
-// 					}
-// 				`}
-// 			</Style>
-//
-// 			<div className={`rect__${rectID}`} {...props}>
-// 				{children}
-// 			</div>
-// 		</>
-// 	)
-// }
-//
-function Debug({ debug, ...props }) {
-	const debugID = useOnceID()
-	const debugPreID = useOnceID()
+/****/
 
+function px(n) {
+	const rem = n / 16
+	return rem + "rem"
+}
+
+function createID(desc) {
+	return (!desc ? "" : desc + "__") + uuidv4().slice(0, 6)
+}
+
+/****/
+
+const debugID = createID()
+
+function Debug({ debug }) {
 	return (
 		<>
 			<Style id={debugID}>
 				{css`
 					.debug__${debugID} {
-						padding-top: ${12 / 16}rem;
-						padding-right: ${12 / 16}rem;
-						padding-bottom: ${12 / 16}rem;
-						padding-left: ${12 / 16}rem;
+						padding-top: ${px(12)};
+						padding-right: ${px(12)};
+						padding-bottom: ${px(12)};
+						padding-left: ${px(12)};
 						position: absolute;
 						bottom: 0;
 						left: 0;
-						width: ${320 / 16}rem;
+						width: ${px(320)};
 					}
-					.debug-pre__${debugPreID} {
-						font-size: ${14 / 16}rem;
+					.debug-pre__${debugID} {
+						font-size: ${px(14)};
 					}
 				`}
 			</Style>
 
-			<div className={`debug__${debugID}`} {...props}>
-				<pre className={`debug-pre__${debugPreID}`}>{JSON.stringify(debug, null, 2)}</pre>
+			<div className={`debug__${debugID}`}>
+				<pre className={`debug-pre__${debugID}`}>{JSON.stringify(debug, null, 2)}</pre>
 			</div>
 		</>
 	)
 }
 
-// <Center style={{ height: "100vh" }}>
-// 	<Box />
-// </Center>
-//
+const screenID = createID()
+const rectID = createID()
+const rectHandleContainerID = createID()
+const rectHandleID = createID()
+
 export default function App() {
 	const [state, setState] = React.useState({
 		down: false,
@@ -75,41 +68,77 @@ export default function App() {
 			}))
 	}, [setState])
 
-	const rectID = useOnceID()
-
 	return (
-		<div
-			style={{ height: "100vh" }}
-			onPointerDown={e => {
-				updateKeys({
-					down: true,
-				})
-			}}
-			onPointerMove={e => {
-				updateKeys({
-					x: e.clientX,
-					y: e.clientY,
-				})
-			}}
-			onPointerUp={e => {
-				updateKeys({
-					down: false,
-				})
-			}}
-		>
-			{/* #rect */}
-			<Style id={rectID}>
+		<>
+			{/**/}
+
+			<Style id={screenID}>
 				{css`
-					.rect__${rectID} {
-						height: ${!state.down ? "auto" : `${state.y / 16}rem`};
-						background-color: hsl(${3.25 * 60}, 100%, 90%);
+					.screen__${screenID} {
+						height: 100vh;
 					}
 				`}
 			</Style>
 
-			<div className={`rect__${rectID}`} />
+			<div
+				className={`screen__${screenID}`}
+				onPointerDown={e => {
+					updateKeys({
+						down: true,
+					})
+				}}
+				onPointerMove={e => {
+					updateKeys({
+						x: Math.round(e.clientX),
+						y: Math.round(e.clientY),
+					})
+				}}
+				onPointerUp={e => {
+					updateKeys({
+						down: false,
+					})
+				}}
+			>
+				{/**/}
 
-			<Debug debug={state} />
-		</div>
+				<Style id={rectID}>
+					{css`
+						.rect__${rectID} {
+							position: relative;
+							height: ${!state.down ? "auto" : px(state.y)};
+							background-color: hsl(${3.25 * 60}, 100%, 90%);
+						}
+						.rect-handle-absolute__${rectID} {
+							padding: ${px(8)};
+							position: absolute;
+							top: 100%;
+							right: 0;
+							left: 0;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+						}
+						.rect-handle__${rectID} {
+							width: ${px(96)};
+							height: ${px(12)};
+							background-color: hsl(${3.25 * 60}, 100%, 90%);
+							border-radius: 9999px;
+						}
+					`}
+				</Style>
+
+				<div className={`rect__${rectID}`}>
+					<div className={`rect-handle-absolute__${rectID}`}>
+						<div className={`rect-handle__${rectID}`} />
+					</div>
+				</div>
+
+				<Debug debug={state} />
+
+				{/**/}
+			</div>
+
+			{/**/}
+		</>
 	)
 }
