@@ -56,23 +56,22 @@ export default function App() {
 	return (
 		<div
 			style={{ height: "100vh" }}
-			onPointerDown={e => {
-				actions.handlePointerDown()
-			}}
+			onPointerDown={actions.handlePointerDown}
 			onPointerMove={e => {
 				actions.handlePointerMove({
 					x: Math.round(e.clientX),
 					y: Math.round(e.clientY),
 				})
 			}}
-			onPointerUp={e => {
-				actions.handlePointerUp()
-			}}
+			onPointerUp={actions.handlePointerUp}
 		>
 			{state.activeElement && (
 				<>
 					<CSS id={activeElementID}>
 						{css`
+							.activeElement__${activeElementID}:focus {
+								outline: none;
+							}
 							.activeElement__${activeElementID}[data-focused="false"] {
 								background-color: hsl(${3.25 * 60}, 100%, 90%);
 								transition-property: background-color;
@@ -91,7 +90,10 @@ export default function App() {
 					<div
 						className={`activeElement__${activeElementID}`}
 						style={state.activeElement.style}
+						onFocus={actions.focusActiveElement}
+						onBlur={actions.blurActiveElement}
 						data-focused={state.activeElement.focused}
+						tabIndex={0}
 					>
 						<div style={{ position: "relative", height: "100%" }}>
 							{/**/}
@@ -116,47 +118,47 @@ export default function App() {
 								<pre className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</pre>
 							</div>
 
-							{/* {state.activeElement.focused && ( */}
-							{/* 	<> */}
-							<CSS id={handleBarID}>
-								{css`
-									.absoluteHandleBar__${handleBarID} {
-										padding-top: ${px(8)};
-										position: absolute;
-										top: 100%;
-										right: 0;
-										left: 0;
-										display: flex;
-										justify-content: center;
-										align-items: center;
-									}
-									.handleBar__${handleBarID} {
-										width: ${px(72)};
-										height: ${px(8)};
-										border-radius: 9999px;
-									}
-									.activeElement__${activeElementID}[data-focused="false"] .handleBar__${handleBarID} {
-										background-color: hsl(${3.25 * 60}, 100%, 90%);
-										transform: scale(1);
-										transition-property: transform, background-color;
-										transition-duration: 100ms;
-										transition-timing-function: ease-out;
-									}
-									.activeElement__${activeElementID}[data-focused="true"] .handleBar__${handleBarID} {
-										background-color: hsl(${3.25 * 60}, 100%, 75%);
-										transform: scale(1.1);
-										transition-property: transform, background-color;
-										transition-duration: 50ms;
-										transition-timing-function: ease-out;
-									}
-								`}
-							</CSS>
+							{state.activeElement.focused && (
+								<>
+									<CSS id={handleBarID}>
+										{css`
+											.absoluteHandleBar__${handleBarID} {
+												padding-top: ${px(8)};
+												position: absolute;
+												top: 100%;
+												right: 0;
+												left: 0;
+												display: flex;
+												justify-content: center;
+												align-items: center;
+											}
+											.handleBar__${handleBarID} {
+												width: ${px(72)};
+												height: ${px(8)};
+												border-radius: 9999px;
+											}
+											.activeElement__${activeElementID}[data-focused="false"] .handleBar__${handleBarID} {
+												background-color: hsl(${3.25 * 60}, 100%, 90%);
+												transform: scale(1);
+												transition-property: transform, background-color;
+												transition-duration: 100ms;
+												transition-timing-function: ease-out;
+											}
+											.activeElement__${activeElementID}[data-focused="true"] .handleBar__${handleBarID} {
+												background-color: hsl(${3.25 * 60}, 100%, 75%);
+												transform: scale(1.1);
+												transition-property: transform, background-color;
+												transition-duration: 50ms;
+												transition-timing-function: ease-out;
+											}
+										`}
+									</CSS>
 
-							<div className={`absoluteHandleBar__${handleBarID}`}>
-								<div className={`handleBar__${handleBarID}`} />
-							</div>
-							{/* 	</> */}
-							{/* )} */}
+									<div className={`absoluteHandleBar__${handleBarID}`}>
+										<div className={`handleBar__${handleBarID}`} />
+									</div>
+								</>
+							)}
 
 							{/**/}
 						</div>
