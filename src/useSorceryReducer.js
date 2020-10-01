@@ -71,15 +71,18 @@ const methods = state => ({
 
 	focusActiveElement() {
 		state.activeElement.focusState.element = true
+		// state.activeElement.focusState.handleBar = false
 	},
 	blurActiveElement() {
-		state.activeElement.focusState.element = true
-		this.blurActiveElementHandleBar()
+		state.activeElement.focusState.element = false
+		// state.activeElement.focusState.handleBar = false
 	},
 	focusActiveElementHandleBar() {
+		// state.activeElement.focusState.element = false
 		state.activeElement.focusState.handleBar = true
 	},
 	blurActiveElementHandleBar() {
+		// state.activeElement.focusState.element = false
 		state.activeElement.focusState.handleBar = false
 	},
 

@@ -53,43 +53,25 @@ const handleBarID = newID()
 export default function App() {
 	const [state, actions] = useSorceryReducer()
 
-	// // Connects state.activeElement.focusState.element.
-	// React.useEffect(() => {
-	// 	if (!state.activeElement) {
-	// 		// No-op
-	// 		return
-	// 	}
-	// 	const id = setTimeout(() => {
-	// 		const element = document.querySelector("[class^='activeElement']")
-	// 		if (state.activeElement.focusState.element) {
-	// 			element.focus()
-	// 		} else {
-	// 			element.blur()
-	// 		}
-	// 	}, 0)
-	// 	return () => {
-	// 		clearTimeout(id)
-	// 	}
-	// }, [state.activeElement])
-
-	// Connects state.activeElement.focusState.handleBar.
-	React.useEffect(() => {
-		if (!state.activeElement) {
-			// No-op
-			return
-		}
-		const id = setTimeout(() => {
-			const element = document.querySelector("[class^='handleBarHitArea']")
-			if (state.activeElement.focusState.handleBar) {
-				element.focus()
-			} else {
-				element.blur()
+	const dep = state.activeElement && state.activeElement.focusState.handleBar
+	React.useEffect(
+		React.useCallback(() => {
+			const id = setTimeout(() => {
+				const element = document.querySelector("[class^='handleBarHitArea']")
+				if (element) {
+					if (state.activeElement.focusState.handleBar) {
+						element.focus()
+					} else {
+						element.blur()
+					}
+				}
+			}, 0)
+			return () => {
+				clearTimeout(id)
 			}
-		}, 0)
-		return () => {
-			clearTimeout(id)
-		}
-	}, [state.activeElement])
+		}, [state]),
+		[dep],
+	)
 
 	return (
 		<div
