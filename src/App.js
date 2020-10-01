@@ -130,7 +130,13 @@ export default function App() {
 				{/**/}
 
 				{state.elements.map(each => (
-					<div id={each.id} style={each.style}>
+					<div
+						id={each.id}
+						style={{
+							...each.style,
+							"--backgroundColor": each.style.backgroundColor,
+						}}
+					>
 						{/**/}
 
 						<CSS id={handleID}>
@@ -152,7 +158,7 @@ export default function App() {
 								.handle__${handleID} {
 									width: ${px(72)};
 									height: ${px(8)};
-									background-color: hsl(${3.25 * 60}, 100%, 90%);
+									background-color: var(--backgroundColor);
 									border-radius: 9999px;
 									transform: scale(1);
 									transition-property: transform, background-color;
@@ -160,7 +166,7 @@ export default function App() {
 									transition-timing-function: ease-out;
 								}
 								.handle__${handleID}:hover {
-									background-color: hsl(${3.25 * 60}, 100%, 75%);
+									background-color: var(--backgroundColor);
 									transform: scale(1.1);
 									transition-property: transform, background-color;
 									transition-duration: 100ms;
