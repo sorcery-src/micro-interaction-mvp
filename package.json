@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"normalize.css": "^8.0.1",
 		"react": "^17.0.0-rc.2",
 		"react-dom": "^17.0.0-rc.2",
 		"react-scripts": "^4.0.0-next.98",
@@ -10,8 +11,6 @@
 		"uuid": "^8.3.0"
 	},
 	"scripts": {
-		"tw-dev": "tailwind build -o src/stylesheets/tailwind/out.css",
-		"tw-build": "NODE_ENV=production yarn tw-dev",
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
@@ -33,7 +32,6 @@
 		]
 	},
 	"devDependencies": {
-		"@tailwindcss/ui": "^0.6.2",
-		"tailwindcss": "^1.8.10"
+		"prettier": "^2.1.2"
 	}
 }

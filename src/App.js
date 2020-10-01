@@ -1,122 +1,218 @@
+/* eslint-disable */
+
 import * as React from "react"
+import CSS from "./CSS" // FIXME
+import css from "tpl"
+import px from "px"
 import useMethods from "use-methods"
 import { v4 as uuidv4 } from "uuid"
 
-function useLayoutClear() {
-	React.useLayoutEffect(() => {
-		setTimeout(() => {
-			console.clear()
-		}, 1e3)
-	}, [])
+/****/
+
+function newID(desc) {
+	return (!desc ? "" : desc + "__") + uuidv4().slice(0, 6)
 }
 
-const initialState = {
-	pointer: {
-		down: false,
-		x: 0,
-		y: 0,
-	},
-	activeElement: null,
-	elements: [],
+/****/
+
+const debugID = newID()
+
+function Debug({ debug }) {
+	return (
+		<>
+			<CSS id={debugID}>
+				{css`
+					.absolute__${debugID} {
+						padding-top: ${px(12)};
+						padding-right: ${px(12)};
+						padding-bottom: ${px(12)};
+						padding-left: ${px(12)};
+						position: absolute;
+						bottom: 0;
+						left: 0;
+						width: ${px(320)};
+					}
+					.pre__${debugID} {
+						font-size: ${px(14)};
+					}
+				`}
+			</CSS>
+
+			<div className={`absolute__${debugID}`}>
+				<pre className={`pre__${debugID}`}>{JSON.stringify(debug, null, 2)}</pre>
+			</div>
+		</>
+	)
 }
 
-const methods = state => ({
-	setPointerDown(down) {
-		state.pointer.down = down
-		if (!down) {
-			// No-op
-			return
-		}
+const screenID = newID()
+const handleBarDebugID = newID()
+const handleBarID = newID()
 
-		// Compute the offset from up to n previous elements:
-		let offset = 0
-		if (state.elements.length) {
-			offset = state.elements.reduce((acc, each) => {
-				return acc + each.styles.height
-			}, 0)
-		}
-
-		state.elements.push({
-			uuid: uuidv4(),
-			parentElement: null,          // TODO
-			previousElementSibling: null, // TODO
-			nextElementSibling: null,     // TODO
-			styles: {
-				display: "block",
-				width: "100%",
-				height: state.pointer.y - offset,
-			},
-		})
-	},
-	setPointerRawXY({ rawX, rawY }) {
-		const x = Math.round(rawX)
-		const y = Math.round(rawY)
-
-		state.pointer.x = x
-		state.pointer.y = y
-
-		if (state.pointer.down && state.elements.length) {
-
-			// Compute the offset from up to n - 1 previous elements:
-			const offset = state.elements.slice(0, state.elements.length - 1).reduce((acc, each) => {
-				return acc + each.styles.height
-			}, 0)
-			state.elements[state.elements.length - 1].styles.height = y - offset
-
-		}
-	},
-})
-
-/* eslint-disable */
+// backgroundColor: `hsl(${3.25 * 60}, 100%, 90%)`,
 export default function App() {
-	useLayoutClear()
+	const [state, actions] = useMethods(
+		state => ({
+			handlePointerDown() {
+				state.pointer.down = true
 
-	const [state, dispatch] = useMethods(methods, initialState)
+				let offset = 0
+				if (state.elements.length > 0) {
+					offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
+				}
+
+				const height = state.pointer.y - 8 - 8 / 2 - offset
+				state.elements.push({
+					id: uuidv4().slice(0, 6),
+					style: {
+						display: "block",
+						width: "100%",
+						maxWidth: "100%",
+						height,
+						backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 100%, 90%)`,
+					},
+				})
+			},
+			handlePointerMove({ x, y }) {
+				state.pointer.x = x
+				state.pointer.y = y
+				if (state.pointer.down) {
+					if (state.elements.length > 0) {
+						// NOTE: Use state.elements.length > 1.
+						let offset = 0
+						if (state.elements.length > 1) {
+							offset = state.elements.slice(0, -1).reduce((acc, each) => acc + each.style.height, 0)
+						}
+
+						const height = Math.max(0, state.pointer.y - 8 - 8 / 2 - offset)
+						state.elements[state.elements.length - 1].style.height = height
+					}
+				}
+			},
+			handlePointerUp() {
+				state.pointer.down = false
+			},
+		}),
+		{
+			pointer: {
+				down: false,
+				x: 0,
+				y: 0,
+			},
+			// activeElementIndex: -1,
+			elements: [],
+		},
+	)
 
 	return (
 		<>
+			{/**/}
+
+			<CSS id={screenID}>
+				{css`
+					.screen__${screenID} {
+						height: 100vh;
+					}
+				`}
+			</CSS>
 
 			<div
-				className="bg-blue-100 min-h-screen"
+				className={`screen__${screenID}`}
 				onPointerDown={e => {
-					dispatch.setPointerDown(true)
-				}}
-				onPointerUp={() => {
-					dispatch.setPointerDown(false)
+					actions.handlePointerDown()
 				}}
 				onPointerMove={e => {
-					dispatch.setPointerRawXY({
-						rawX: e.clientX,
-						rawY: e.clientY,
+					actions.handlePointerMove({
+						x: Math.round(e.clientX),
+						y: Math.round(e.clientY),
 					})
 				}}
+				onPointerUp={e => {
+					actions.handlePointerUp()
+				}}
 			>
+				{/**/}
 
 				{state.elements.map(each => (
 					<div
-						key={each.uuid}
-						className="bg-blue-200" // DEBUG
-						style={each.styles}
+						key={each.id}
+						id={each.id}
+						style={{
+							...each.style,
+							"--backgroundColor": each.style.backgroundColor,
+						}}
 					>
-						<div className="relative h-full">
-							<div className="p-2 absolute bottom-0 right-0">
-								<p className="font-mono text-sm tabular-nums">
-									({each.styles.width}, {each.styles.height + "px"})
-								</p>
+						<div style={{ position: "relative", height: "100%" }}>
+							{/**/}
+
+							<CSS id={handleBarDebugID}>
+								{css`
+									.absolute-debug__${handleBarDebugID} {
+										padding-top: ${px(8)};
+										padding-right: ${px(8)};
+										position: absolute;
+										right: 0;
+										bottom: 0;
+										user-select: none;
+									}
+									.debug__${handleBarDebugID} {
+										font-size: ${px(14)};
+									}
+								`}
+							</CSS>
+
+							<div className={`absolute-debug__${handleBarDebugID}`}>
+								<pre className={`debug__${handleBarDebugID}`}>{each.style.height}px</pre>
 							</div>
+
+							<CSS id={handleBarID}>
+								{css`
+									.absolute-handle-bar__${handleBarID} {
+										padding-top: ${px(8)};
+										position: absolute;
+										top: 100%;
+										right: 0;
+										left: 0;
+										display: flex;
+										justify-content: center;
+										align-items: center;
+									}
+									.handle-bar__${handleBarID} {
+										width: ${px(72)};
+										height: ${px(8)};
+										/* background-color: var(--backgroundColor); */
+										border-radius: 9999px;
+									}
+									.handle-bar__${handleBarID} {
+										background-color: var(--backgroundColor);
+										transform: scale(1);
+										transition-property: transform, background-color;
+										transition-duration: 100ms;
+										transition-timing-function: ease-out;
+									}
+									.handle-bar__${handleBarID}:hover {
+										background-color: var(--backgroundColor);
+										transform: scale(1.1);
+										transition-property: transform, background-color;
+										transition-duration: 100ms;
+										transition-timing-function: ease-out;
+									}
+								`}
+							</CSS>
+
+							<div className={`absolute-handle-bar__${handleBarID}`}>
+								<div className={`handle-bar__${handleBarID}`} />
+							</div>
+
+							{/**/}
 						</div>
 					</div>
 				))}
 
+				<Debug debug={state} />
 			</div>
 
-			{/* DEBUG */}
-			<div className="p-2 fixed bottom-0 left-0">
-				<p className="whitespace-pre font-mono text-sm tabular-nums">
-					{JSON.stringify(state, null, 2)}
-				</p>
-			</div>
-
+			{/**/}
 		</>
 	)
 }
