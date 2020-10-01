@@ -90,9 +90,16 @@ export default function App() {
 					<div
 						className={`activeElement__${activeElementID}`}
 						style={state.activeElement.style}
-						onFocus={actions.focusActiveElement}
-						onBlur={actions.blurActiveElement}
-						data-focused={state.activeElement.focused}
+						onFocus={e => {
+							// console.log({ ...e })
+							actions.focusActiveElement()
+						}}
+						onBlur={e => {
+							if (!e.target.contains(e.relatedTarget)) {
+								actions.blurActiveElement()
+							}
+						}}
+						data-focused={state.activeElement.focusState.element}
 						tabIndex={0}
 					>
 						<div style={{ position: "relative", height: "100%" }}>
@@ -118,7 +125,7 @@ export default function App() {
 								<pre className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</pre>
 							</div>
 
-							{state.activeElement.focused && (
+							{state.activeElement.focusState.element && (
 								<>
 									<CSS id={handleBarID}>
 										{css`
@@ -137,14 +144,16 @@ export default function App() {
 												height: ${px(8)};
 												border-radius: 9999px;
 											}
-											.activeElement__${activeElementID}[data-focused="false"] .handleBar__${handleBarID} {
+											.handleBar__${handleBarID} {
 												background-color: hsl(${3.25 * 60}, 100%, 90%);
 												transform: scale(1);
 												transition-property: transform, background-color;
 												transition-duration: 100ms;
 												transition-timing-function: ease-out;
 											}
-											.activeElement__${activeElementID}[data-focused="true"] .handleBar__${handleBarID} {
+											.handleBar__${handleBarID}:focus {
+												outline: none;
+
 												background-color: hsl(${3.25 * 60}, 100%, 75%);
 												transform: scale(1.1);
 												transition-property: transform, background-color;
@@ -155,7 +164,18 @@ export default function App() {
 									</CSS>
 
 									<div className={`absoluteHandleBar__${handleBarID}`}>
-										<div className={`handleBar__${handleBarID}`} />
+										<div
+											className={`handleBar__${handleBarID}`}
+											// onFocus={e => {
+											// 	e.preventDefault()
+											// 	e.stopPropagation()
+											// }}
+											// onBlur={e => {
+											// 	e.preventDefault()
+											// 	e.stopPropagation()
+											// }}
+											tabIndex={0}
+										/>
 									</div>
 								</>
 							)}
