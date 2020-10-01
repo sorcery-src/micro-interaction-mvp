@@ -23,7 +23,7 @@ function Debug({ debug }) {
 		<>
 			<CSS id={debugID}>
 				{css`
-					.absolute__${debugID} {
+					.debugAbsoluteContext__${debugID} {
 						padding-top: ${px(12)};
 						padding-right: ${px(12)};
 						padding-bottom: ${px(12)};
@@ -33,14 +33,14 @@ function Debug({ debug }) {
 						left: 0;
 						width: ${px(320)};
 					}
-					.pre__${debugID} {
+					.debug__${debugID} {
 						font-size: ${px(14)};
 					}
 				`}
 			</CSS>
 
-			<div className={`absolute__${debugID}`}>
-				<pre className={`pre__${debugID}`}>{JSON.stringify(debug, null, 2)}</pre>
+			<div className={`debugAbsoluteContext__${debugID}`}>
+				<pre className={`debug__${debugID}`}>{JSON.stringify(debug, null, 2)}</pre>
 			</div>
 		</>
 	)
@@ -104,7 +104,7 @@ export default function App() {
 
 							<CSS id={handleBarDebugID}>
 								{css`
-									.absoluteDebug__${handleBarDebugID} {
+									.debugAbsoluteContext__${handleBarDebugID} {
 										padding-top: ${px(8)};
 										padding-right: ${px(8)};
 										position: absolute;
@@ -118,7 +118,7 @@ export default function App() {
 								`}
 							</CSS>
 
-							<div className={`absoluteDebug__${handleBarDebugID}`}>
+							<div className={`debugAbsoluteContext__${handleBarDebugID}`}>
 								<pre className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</pre>
 							</div>
 
@@ -126,8 +126,7 @@ export default function App() {
 								<>
 									<CSS id={handleBarID}>
 										{css`
-											.absoluteHandleBar__${handleBarID} {
-												padding-top: ${px(6)};
+											.handleBarAbsoluteContext__${handleBarID} {
 												position: absolute;
 												top: 100%;
 												right: 0;
@@ -136,35 +135,36 @@ export default function App() {
 												justify-content: center;
 												align-items: center;
 											}
+											.handleBarHitArea__${handleBarID} {
+												padding-top: ${px(6)};
+												padding-right: ${px(6)};
+												padding-bottom: ${px(6)};
+												padding-left: ${px(6)};
+											}
+											.handleBarHitArea__${handleBarID}:focus {
+												outline: none;
+											}
 											.handleBar__${handleBarID} {
 												width: ${px(72)};
 												height: ${px(6)};
 												border-radius: 9999px;
-
 												background-color: hsl(${3.25 * 60}, 100%, 90%);
-												transform: scale(1);
-												transition-property: transform, background-color;
-												transition-duration: 100ms;
-												transition-timing-function: ease-out;
 											}
-											.handleBar__${handleBarID}:focus {
-												outline: none;
-
+											.handleBarHitArea__${handleBarID}:focus .handleBar__${handleBarID} {
 												background-color: hsl(${3.25 * 60}, 100%, 75%);
-												transition-property: background-color;
-												transition-duration: 50ms;
-												transition-timing-function: ease-out;
 											}
 										`}
 									</CSS>
 
-									<div className={`absoluteHandleBar__${handleBarID}`}>
+									<div className={`handleBarAbsoluteContext__${handleBarID}`}>
 										<div
-											className={`handleBar__${handleBarID}`}
+											className={`handleBarHitArea__${handleBarID}`}
 											onFocus={actions.focusActiveElementHandleBar}
 											onBlur={actions.focusActiveElement}
 											tabIndex={0}
-										/>
+										>
+											<div className={`handleBar__${handleBarID}`} />
+										</div>
 									</div>
 								</>
 							)}
