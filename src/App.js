@@ -3,6 +3,7 @@
 import * as React from "react"
 import css from "tpl"
 import Style from "Style"
+// import useOnceID from "useOnceID"
 import { v4 as uuidv4 } from "uuid"
 
 /****/
@@ -12,20 +13,20 @@ function px(n) {
 	return rem + "rem"
 }
 
-function createID(desc) {
+function newID(desc) {
 	return (!desc ? "" : desc + "__") + uuidv4().slice(0, 6)
 }
 
 /****/
 
-const debugID = createID()
+const debugID = newID()
 
 function Debug({ debug }) {
 	return (
 		<>
 			<Style id={debugID}>
 				{css`
-					.debug__${debugID} {
+					.debug-absolute__${debugID} {
 						padding-top: ${px(12)};
 						padding-right: ${px(12)};
 						padding-bottom: ${px(12)};
@@ -35,23 +36,21 @@ function Debug({ debug }) {
 						left: 0;
 						width: ${px(320)};
 					}
-					.debug-pre__${debugID} {
+					.debug-absolute-pre__${debugID} {
 						font-size: ${px(14)};
 					}
 				`}
 			</Style>
 
-			<div className={`debug__${debugID}`}>
-				<pre className={`debug-pre__${debugID}`}>{JSON.stringify(debug, null, 2)}</pre>
+			<div className={`debug-absolute__${debugID}`}>
+				<pre className={`debug-absolute-pre__${debugID}`}>{JSON.stringify(debug, null, 2)}</pre>
 			</div>
 		</>
 	)
 }
 
-const screenID = createID()
-const rectID = createID()
-const rectHandleContainerID = createID()
-const rectHandleID = createID()
+const screenID = newID()
+const rectID = newID()
 
 export default function App() {
 	const [state, setState] = React.useState({
@@ -105,10 +104,10 @@ export default function App() {
 					{css`
 						.rect__${rectID} {
 							position: relative;
-							height: ${!state.down ? "auto" : px(state.y)};
+							height: ${!state.down ? "auto" : px(state.y - 8 /* padding */ - 10 / 2 /* height */)};
 							background-color: hsl(${3.25 * 60}, 100%, 90%);
 						}
-						.rect-handle-absolute__${rectID} {
+						.rect-absolute__${rectID} {
 							padding: ${px(8)};
 							position: absolute;
 							top: 100%;
@@ -118,7 +117,7 @@ export default function App() {
 							justify-content: center;
 							align-items: center;
 						}
-						.rect-handle__${rectID} {
+						.rect-absolute-handle__${rectID} {
 							width: ${px(80)};
 							height: ${px(10)};
 							background-color: hsl(${3.25 * 60}, 100%, 90%);
@@ -127,9 +126,8 @@ export default function App() {
 							transition-duration: 100ms;
 							transition-timing-function: ease-out;
 						}
-						.rect-handle__${rectID}:hover {
+						.rect-absolute-handle__${rectID}:hover {
 							background-color: hsl(${3.25 * 60}, 100%, 75%);
-							/* transition: background-color 100ms ease-out; */
 							transition-property: background-color;
 							transition-duration: 100ms;
 							transition-timing-function: ease-out;
@@ -138,8 +136,8 @@ export default function App() {
 				</Style>
 
 				<div className={`rect__${rectID}`}>
-					<div className={`rect-handle-absolute__${rectID}`}>
-						<div className={`rect-handle__${rectID}`} />
+					<div className={`rect-absolute__${rectID}`}>
+						<div className={`rect-absolute-handle__${rectID}`} />
 					</div>
 				</div>
 
