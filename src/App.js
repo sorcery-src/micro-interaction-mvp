@@ -49,18 +49,32 @@ const rectID = newID()
 
 export default function App() {
 	const [state, setState] = React.useState({
-		down: false,
-		x: 0,
-		y: 0,
+		pointer: {
+			down: false,
+			x: 0,
+			y: 0,
+		},
 	})
 
-	const updateKeys = React.useMemo(() => {
-		return next =>
-			setState(current => ({
-				...current,
-				...next,
-			}))
-	}, [setState])
+	function setPointerDown(down) {
+		setState(current => ({
+			...current,
+			pointer: {
+				...current.pointer,
+				down,
+			},
+		}))
+	}
+	function setPointerXY({ x, y }) {
+		setState(current => ({
+			...current,
+			pointer: {
+				...current.pointer,
+				x,
+				y,
+			},
+		}))
+	}
 
 	return (
 		<>
@@ -77,31 +91,27 @@ export default function App() {
 			<div
 				className={`screen__${screenID}`}
 				onPointerDown={e => {
-					updateKeys({
-						down: true,
-					})
+					setPointerDown(true)
 				}}
 				onPointerMove={e => {
-					updateKeys({
+					setPointerXY({
 						x: Math.round(e.clientX),
 						y: Math.round(e.clientY),
 					})
 				}}
 				onPointerUp={e => {
-					updateKeys({
-						down: false,
-					})
+					setPointerDown(false)
 				}}
 			>
 				{/**/}
 
-				{state.down && (
+				{state.pointer.down && (
 					<>
 						<CSS id={rectID}>
 							{css`
 								.rect__${rectID} {
 									position: relative;
-									height: ${!state.down ? "auto" : `calc(${px(state.y)} - ${px(8)} - ${px(8 / 2)})`};
+									height: ${!state.pointer.down ? "auto" : `calc(${px(state.pointer.y)} - ${px(8)} - ${px(8 / 2)})`};
 									background-color: hsl(${3.25 * 60}, 100%, 90%);
 								}
 								.rect-absolute__${rectID} {
