@@ -4,6 +4,7 @@ import * as React from "react"
 import CSS from "./CSS" // FIXME
 import css from "tpl"
 import px from "px"
+import useMethods from "use-methods"
 import { v4 as uuidv4 } from "uuid"
 
 /****/
@@ -48,33 +49,24 @@ const screenID = newID()
 const rectID = newID()
 
 export default function App() {
-	const [state, setState] = React.useState({
-		pointer: {
-			down: false,
-			x: 0,
-			y: 0,
+	const [state, methods] = useMethods(
+		state => ({
+			setPointerDown(down) {
+				state.pointer.down = down
+			},
+			setPointerXY({ x, y }) {
+				state.pointer.x = x
+				state.pointer.y = y
+			},
+		}),
+		{
+			pointer: {
+				down: false,
+				x: 0,
+				y: 0,
+			},
 		},
-	})
-
-	function setPointerDown(down) {
-		setState(current => ({
-			...current,
-			pointer: {
-				...current.pointer,
-				down,
-			},
-		}))
-	}
-	function setPointerXY({ x, y }) {
-		setState(current => ({
-			...current,
-			pointer: {
-				...current.pointer,
-				x,
-				y,
-			},
-		}))
-	}
+	)
 
 	return (
 		<>
@@ -91,16 +83,16 @@ export default function App() {
 			<div
 				className={`screen__${screenID}`}
 				onPointerDown={e => {
-					setPointerDown(true)
+					methods.setPointerDown(true)
 				}}
 				onPointerMove={e => {
-					setPointerXY({
+					methods.setPointerXY({
 						x: Math.round(e.clientX),
 						y: Math.round(e.clientY),
 					})
 				}}
 				onPointerUp={e => {
-					setPointerDown(false)
+					methods.setPointerDown(false)
 				}}
 			>
 				{/**/}
