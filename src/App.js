@@ -46,7 +46,7 @@ function Debug({ debug }) {
 	)
 }
 
-const screenID = newID()
+const activeElementID = newID()
 const handleBarDebugID = newID()
 const handleBarID = newID()
 
@@ -54,49 +54,51 @@ export default function App() {
 	const [state, actions] = useSorceryReducer()
 
 	return (
-		<>
-			{/**/}
+		<div
+			style={{ height: "100vh" }}
+			onPointerDown={e => {
+				actions.handlePointerDown()
+			}}
+			onPointerMove={e => {
+				actions.handlePointerMove({
+					x: Math.round(e.clientX),
+					y: Math.round(e.clientY),
+				})
+			}}
+			onPointerUp={e => {
+				actions.handlePointerUp()
+			}}
+		>
+			{state.activeElement && (
+				<>
+					<CSS id={activeElementID}>
+						{css`
+							.activeElement__${activeElementID}[data-focused="false"] {
+								background-color: hsl(${3.25 * 60}, 100%, 90%);
+								transition-property: background-color;
+								transition-duration: 100ms;
+								transition-timing-function: ease-out;
+							}
+							.activeElement__${activeElementID}[data-focused="true"] {
+								background-color: hsl(${3.25 * 60}, 100%, 75%);
+								/* transition-property: background-color; */
+								/* transition-duration: 100ms; */
+								/* transition-timing-function: ease-out; */
+							}
+						`}
+					</CSS>
 
-			<CSS id={screenID}>
-				{css`
-					.screen__${screenID} {
-						height: 100vh;
-					}
-				`}
-			</CSS>
-
-			<div
-				className={`screen__${screenID}`}
-				onPointerDown={e => {
-					actions.handlePointerDown()
-				}}
-				onPointerMove={e => {
-					actions.handlePointerMove({
-						x: Math.round(e.clientX),
-						y: Math.round(e.clientY),
-					})
-				}}
-				onPointerUp={e => {
-					actions.handlePointerUp()
-				}}
-			>
-				{/**/}
-
-				{state.activeElement && (
 					<div
-						key={state.activeElement.id}
-						id={state.activeElement.id}
-						style={{
-							...state.activeElement.style,
-							"--backgroundColor": state.activeElement.style.backgroundColor,
-						}}
+						className={`activeElement__${activeElementID}`}
+						style={state.activeElement.style}
+						data-focused={state.activeElement.focused}
 					>
 						<div style={{ position: "relative", height: "100%" }}>
 							{/**/}
 
 							<CSS id={handleBarDebugID}>
 								{css`
-									.absolute-debug__${handleBarDebugID} {
+									.absoluteDebug__${handleBarDebugID} {
 										padding-top: ${px(8)};
 										padding-right: ${px(8)};
 										position: absolute;
@@ -110,7 +112,7 @@ export default function App() {
 								`}
 							</CSS>
 
-							<div className={`absolute-debug__${handleBarDebugID}`}>
+							<div className={`absoluteDebug__${handleBarDebugID}`}>
 								<pre className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</pre>
 							</div>
 
@@ -118,7 +120,7 @@ export default function App() {
 								<>
 									<CSS id={handleBarID}>
 										{css`
-											.absolute-handle-bar__${handleBarID} {
+											.absoluteHandleBar__${handleBarID} {
 												padding-top: ${px(8)};
 												position: absolute;
 												top: 100%;
@@ -128,20 +130,20 @@ export default function App() {
 												justify-content: center;
 												align-items: center;
 											}
-											.handle-bar__${handleBarID} {
+											.handleBar__${handleBarID} {
 												width: ${px(72)};
 												height: ${px(8)};
 												/* background-color: var(--backgroundColor); */
 												border-radius: 9999px;
 											}
-											.handle-bar__${handleBarID} {
+											.handleBar__${handleBarID} {
 												background-color: var(--backgroundColor);
 												transform: scale(1);
 												transition-property: transform, background-color;
 												transition-duration: 100ms;
 												transition-timing-function: ease-out;
 											}
-											.handle-bar__${handleBarID}:hover {
+											.handleBar__${handleBarID}:hover {
 												background-color: var(--backgroundColor);
 												transform: scale(1.1);
 												transition-property: transform, background-color;
@@ -151,8 +153,8 @@ export default function App() {
 										`}
 									</CSS>
 
-									<div className={`absolute-handle-bar__${handleBarID}`}>
-										<div className={`handle-bar__${handleBarID}`} />
+									<div className={`absoluteHandleBar__${handleBarID}`}>
+										<div className={`handleBar__${handleBarID}`} />
 									</div>
 								</>
 							)}
@@ -160,12 +162,10 @@ export default function App() {
 							{/**/}
 						</div>
 					</div>
-				)}
+				</>
+			)}
 
-				<Debug debug={state} />
-			</div>
-
-			{/**/}
-		</>
+			<Debug debug={state} />
+		</div>
 	)
 }

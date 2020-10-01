@@ -20,7 +20,7 @@ const methods = state => ({
 				maxWidth: "100%",
 				height,
 				// backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 100%, 90%)`,
-				backgroundColor: `hsl(${3.25 * 60}, 100%, 90%)`,
+				// backgroundColor: `hsl(${3.25 * 60}, 100%, 90%)`,
 			},
 		}
 	},
