@@ -1,3 +1,5 @@
+import { useLayoutEffect } from "react"
+
 // <Style> renders a <style> element once.
 //
 // Ex:
@@ -17,16 +19,25 @@
 // }
 //
 export default function Style({ id, children: css }) {
-	// Guard:
 	if (typeof id !== "string" || id === "") {
 		const errorMessage = "<Style>: Did you forget an ID prop? Try <Style id={<string>}>."
 		throw new Error(errorMessage)
 	}
 
-	// Prevent rerender:
-	if (document.getElementById(id)) {
-		return null
-	}
-	// Render:
-	return <style id={id}>{css}</style>
+	useLayoutEffect(() => {
+		if (!document.getElementById(id)) {
+			const style = document.createElement("style")
+			style.id = id
+			style.appendChild(document.createTextNode(css))
+			document.head.append(style)
+		}
+		return () => {
+			const style = document.getElementById(id)
+			if (style) {
+				style.remove()
+			}
+		}
+	}, [id, css])
+
+	return null
 }
