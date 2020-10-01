@@ -46,8 +46,10 @@ function Debug({ debug }) {
 }
 
 const screenID = newID()
-const handleID = newID()
+const handleBarDebugID = newID()
+const handleBarID = newID()
 
+// backgroundColor: `hsl(${3.25 * 60}, 100%, 90%)`,
 export default function App() {
 	const [state, actions] = useMethods(
 		state => ({
@@ -59,14 +61,14 @@ export default function App() {
 					offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
 				}
 
+				const height = state.pointer.y - 8 - 8 / 2 - offset
 				state.elements.push({
-					id: uuidv4(),
+					id: uuidv4().slice(0, 6),
 					style: {
 						display: "block",
 						width: "100%",
 						maxWidth: "100%",
-						height: state.pointer.y - 8 - 8 / 2 - offset,
-						// backgroundColor: `hsl(${3.25 * 60}, 100%, 90%)`,
+						height,
 						backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 100%, 90%)`,
 					},
 				})
@@ -81,7 +83,9 @@ export default function App() {
 						if (state.elements.length > 1) {
 							offset = state.elements.slice(0, -1).reduce((acc, each) => acc + each.style.height, 0)
 						}
-						state.elements[state.elements.length - 1].style.height = state.pointer.y - 8 - 8 / 2 - offset
+
+						const height = Math.max(0, state.pointer.y - 8 - 8 / 2 - offset)
+						state.elements[state.elements.length - 1].style.height = height
 					}
 				}
 			},
@@ -131,58 +135,77 @@ export default function App() {
 
 				{state.elements.map(each => (
 					<div
+						key={each.id}
 						id={each.id}
 						style={{
 							...each.style,
 							"--backgroundColor": each.style.backgroundColor,
 						}}
 					>
-						{/**/}
+						<div style={{ position: "relative", height: "100%" }}>
+							{/**/}
 
-						<CSS id={handleID}>
-							{css`
-								.relative__${handleID} {
-									position: relative;
-									height: 100%;
-								}
-								.absolute__${handleID} {
-									padding: ${px(8)};
-									position: absolute;
-									top: 100%;
-									right: 0;
-									left: 0;
-									display: flex;
-									justify-content: center;
-									align-items: center;
-								}
-								.handle__${handleID} {
-									width: ${px(72)};
-									height: ${px(8)};
-									background-color: var(--backgroundColor);
-									border-radius: 9999px;
-									transform: scale(1);
-									transition-property: transform, background-color;
-									transition-duration: 100ms;
-									transition-timing-function: ease-out;
-								}
-								.handle__${handleID}:hover {
-									background-color: var(--backgroundColor);
-									transform: scale(1.1);
-									transition-property: transform, background-color;
-									transition-duration: 100ms;
-									transition-timing-function: ease-out;
-								}
-							`}
-						</CSS>
+							<CSS id={handleBarDebugID}>
+								{css`
+									.absolute-debug__${handleBarDebugID} {
+										padding-top: ${px(8)};
+										padding-right: ${px(8)};
+										position: absolute;
+										right: 0;
+										bottom: 0;
+										user-select: none;
+									}
+									.debug__${handleBarDebugID} {
+										font-size: ${px(14)};
+									}
+								`}
+							</CSS>
 
-						{/* {state.activeElement.focused && ( */}
-						<div className={`relative__${handleID}`}>
-							<div className={`absolute__${handleID}`}>
-								<div className={`handle__${handleID}`} />
+							<div className={`absolute-debug__${handleBarDebugID}`}>
+								<pre className={`debug__${handleBarDebugID}`}>{each.style.height}px</pre>
 							</div>
-						</div>
 
-						{/**/}
+							<CSS id={handleBarID}>
+								{css`
+									.absolute-handle-bar__${handleBarID} {
+										padding-top: ${px(8)};
+										position: absolute;
+										top: 100%;
+										right: 0;
+										left: 0;
+										display: flex;
+										justify-content: center;
+										align-items: center;
+									}
+									.handle-bar__${handleBarID} {
+										width: ${px(72)};
+										height: ${px(8)};
+										/* background-color: var(--backgroundColor); */
+										border-radius: 9999px;
+									}
+									.handle-bar__${handleBarID} {
+										background-color: var(--backgroundColor);
+										transform: scale(1);
+										transition-property: transform, background-color;
+										transition-duration: 100ms;
+										transition-timing-function: ease-out;
+									}
+									.handle-bar__${handleBarID}:hover {
+										background-color: var(--backgroundColor);
+										transform: scale(1.1);
+										transition-property: transform, background-color;
+										transition-duration: 100ms;
+										transition-timing-function: ease-out;
+									}
+								`}
+							</CSS>
+
+							<div className={`absolute-handle-bar__${handleBarID}`}>
+								<div className={`handle-bar__${handleBarID}`} />
+							</div>
+
+							{/**/}
+						</div>
 					</div>
 				))}
 
