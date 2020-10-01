@@ -97,7 +97,6 @@ const methods = state => ({
 
 	handlePointerUp() {
 		state.pointer.active = false
-		// this.blurActiveElement()
 	},
 
 	focusActiveElement() {
@@ -113,15 +112,15 @@ const methods = state => ({
 		state.activeElement.focusState.handleBar = false
 	},
 
-	keyDownShiftActiveElement() {
+	keyDownShift() {
 		state.keys.shift = true
 	},
-	keyDownAltActiveElement() {
-		state.keys.alt = true
-	},
-	keyUpActiveElement() {
+	// keyDownAlt() {
+	// 	state.keys.alt = true
+	// },
+	keyUp() {
 		state.keys.shift = false
-		state.keys.alt = false
+		// state.keys.alt = false
 	},
 
 	keyDownDeleteActiveElement() {
@@ -137,7 +136,7 @@ const initialState = {
 	},
 	keys: {
 		shift: false,
-		alt: false,
+		// alt: false,
 	},
 	activeElement: null,
 	// elements: [],

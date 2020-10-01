@@ -53,6 +53,29 @@ const handleBarID = newID()
 export default function App() {
 	const [state, actions] = useSorceryReducer()
 
+	// Manages key down.
+	React.useEffect(() => {
+		const handler = e => {
+			if (e.key === "Shift" || e.keyCode === 16 || e.shiftKey) {
+				actions.keyDownShift()
+			} else if (e.key === "Backspace" || e.keyCode === 8) {
+				actions.keyDownDelete()
+			}
+		}
+		document.addEventListener("keydown", handler)
+		return () => {
+			document.removeEventListener("keydown", handler)
+		}
+	}, [actions])
+
+	// Manages key up.
+	React.useEffect(() => {
+		document.addEventListener("keyup", actions.keyUp)
+		return () => {
+			document.removeEventListener("keyup", actions.keyUp)
+		}
+	}, [actions])
+
 	const dep = state.activeElement && state.activeElement.focusState.handleBar
 	React.useEffect(
 		React.useCallback(() => {
@@ -116,16 +139,16 @@ export default function App() {
 								actions.blurActiveElement()
 							}
 						}}
-						onKeyDown={e => {
-							if (e.key === "Shift" || e.keyCode === 16) {
-								actions.keyDownShiftActiveElement()
-							} else if (e.key === "Alt" || e.keyCode === 18) {
-								actions.keyDownAltActiveElement()
-							} else if (e.key === "Backspace" || e.keyCode === 8) {
-								actions.keyDownDeleteActiveElement()
-							}
-						}}
-						onKeyUp={actions.keyUpActiveElement}
+						// onKeyDown={e => {
+						// 	if (e.key === "Shift" || e.keyCode === 16) {
+						// 		actions.keyDownShift()
+						// 	} else if (e.key === "Alt" || e.keyCode === 18) {
+						// 		actions.keyDownAlt()
+						// 	} else if (e.key === "Backspace" || e.keyCode === 8) {
+						// 		actions.keyDownDelete()
+						// 	}
+						// }}
+						// onKeyUp={actions.keyUpActiveElement}
 						data-focus={state.activeElement.focusState.element}
 						tabIndex={0}
 					>
@@ -137,19 +160,23 @@ export default function App() {
 									.debugAbsoluteContext__${handleBarDebugID} {
 										padding-top: ${px(8)};
 										padding-right: ${px(8)};
+										padding-bottom: ${px(8)};
+										padding-left: ${px(8)};
 										position: absolute;
+										top: ${state.activeElement.style.height < 24 ? "100%" : "auto"};
 										right: 0;
-										bottom: 0;
+										/* NOTE: "0" must be a string (why?). */
+										bottom: ${state.activeElement.style.height < 24 ? "auto" : "0"};
 										user-select: none;
 									}
 									.debug__${handleBarDebugID} {
-										font-size: ${px(14)};
+										font-family: monospace;
 									}
 								`}
 							</CSS>
 
 							<div className={`debugAbsoluteContext__${handleBarDebugID}`}>
-								<pre className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</pre>
+								<div className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</div>
 							</div>
 
 							{state.activeElement.focusState.element && (
