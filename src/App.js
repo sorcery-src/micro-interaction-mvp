@@ -101,7 +101,7 @@ export default function App() {
 			<Style id={rectID}>
 				{css`
 					.rect__${rectID} {
-						height: ${state.y / 16}rem;
+						height: ${!state.down ? "auto" : `${state.y / 16}rem`};
 						background-color: hsl(${3.25 * 60}, 100%, 90%);
 					}
 				`}
