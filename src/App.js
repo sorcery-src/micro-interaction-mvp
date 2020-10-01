@@ -65,7 +65,7 @@ function Rect({ children, ...props }) {
 
 function Debug({ debug, ...props }) {
 	const debugID = useOnceID()
-	const debugTextID = useOnceID()
+	const debugPreID = useOnceID()
 
 	return (
 		<>
@@ -77,24 +77,18 @@ function Debug({ debug, ...props }) {
 						padding-bottom: ${12 / 16}rem;
 						padding-left: ${12 / 16}rem;
 						position: absolute;
-						right: 0;
 						bottom: 0;
-						width: ${240 / 16}rem;
+						left: 0;
+						width: ${320 / 16}rem;
+					}
+					.debug-pre__${debugPreID} {
+						font-size: ${14 / 16}rem;
 					}
 				`}
 			</Style>
 
 			<div className={`debug__${debugID}`} {...props}>
-				<pre className={`debug-text__${debugTextID}`}>
-					<Style id={debugTextID}>
-						{css`
-							.debug-text__${debugTextID} {
-								font-size: ${14 / 16}em;
-							}
-						`}
-					</Style>
-					{JSON.stringify(debug, null, 2)}
-				</pre>
+				<pre className={`debug-pre__${debugPreID}`}>{JSON.stringify(debug, null, 2)}</pre>
 			</div>
 		</>
 	)
@@ -111,7 +105,7 @@ export default function App() {
 		y: 0,
 	})
 
-	const update = React.useMemo(() => {
+	const updateKeys = React.useMemo(() => {
 		return next =>
 			setState(current => ({
 				...current,
@@ -123,9 +117,19 @@ export default function App() {
 		<div
 			style={{ height: "100vh" }}
 			onPointerDown={e => {
-				update({
+				updateKeys({
+					down: true,
+				})
+			}}
+			onPointerMove={e => {
+				updateKeys({
 					x: e.clientX,
 					y: e.clientY,
+				})
+			}}
+			onPointerUp={e => {
+				updateKeys({
+					down: false,
 				})
 			}}
 		>
