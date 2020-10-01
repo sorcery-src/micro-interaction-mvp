@@ -127,7 +127,7 @@ export default function App() {
 									<CSS id={handleBarID}>
 										{css`
 											.absoluteHandleBar__${handleBarID} {
-												padding-top: ${px(8)};
+												padding-top: ${px(6)};
 												position: absolute;
 												top: 100%;
 												right: 0;
@@ -138,10 +138,9 @@ export default function App() {
 											}
 											.handleBar__${handleBarID} {
 												width: ${px(72)};
-												height: ${px(8)};
+												height: ${px(6)};
 												border-radius: 9999px;
-											}
-											.handleBar__${handleBarID} {
+
 												background-color: hsl(${3.25 * 60}, 100%, 90%);
 												transform: scale(1);
 												transition-property: transform, background-color;
@@ -152,8 +151,7 @@ export default function App() {
 												outline: none;
 
 												background-color: hsl(${3.25 * 60}, 100%, 75%);
-												transform: scale(1.1);
-												transition-property: transform, background-color;
+												transition-property: background-color;
 												transition-duration: 50ms;
 												transition-timing-function: ease-out;
 											}

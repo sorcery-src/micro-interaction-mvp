@@ -10,7 +10,7 @@ const methods = state => ({
 		// 	offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
 		// }
 
-		// const height = state.pointer.y - 8 - 8 / 2 // - offset
+		// const height = state.pointer.y - 6 - 6 / 2 // - offset
 		// state.activeElement = {
 		// 	id: uuidv4().slice(0, 6),
 		// 	focused: true,
@@ -29,7 +29,7 @@ const methods = state => ({
 
 		// TODO: Check state.activeElement.focusState.element?
 		if (state.pointer.down && state.activeElement.focusState.handleBar) {
-			const height = Math.max(0, state.pointer.y - 8 - 8 / 2 /* - offset */)
+			const height = Math.max(0, state.pointer.y - 6 - 6 / 2 /* - offset */)
 			state.activeElement.style.height = height
 		}
 
@@ -40,7 +40,7 @@ const methods = state => ({
 		// 	// if (state.elements.length > 1) {
 		// 	// 	offset = state.elements.slice(0, -1).reduce((acc, each) => acc + each.style.height, 0)
 		// 	// }
-		// 	const height = Math.max(0, state.pointer.y - 8 - 8 / 2 /* - offset */)
+		// 	const height = Math.max(0, state.pointer.y - 6 - 6 / 2 /* - offset */)
 		// 	state.activeElement.style.height = height
 		// 	// }
 		// }
