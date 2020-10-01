@@ -119,10 +119,20 @@ export default function App() {
 							align-items: center;
 						}
 						.rect-handle__${rectID} {
-							width: ${px(96)};
-							height: ${px(12)};
+							width: ${px(80)};
+							height: ${px(10)};
 							background-color: hsl(${3.25 * 60}, 100%, 90%);
 							border-radius: 9999px;
+							transition-property: background-color;
+							transition-duration: 100ms;
+							transition-timing-function: ease-out;
+						}
+						.rect-handle__${rectID}:hover {
+							background-color: hsl(${3.25 * 60}, 100%, 75%);
+							/* transition: background-color 100ms ease-out; */
+							transition-property: background-color;
+							transition-duration: 100ms;
+							transition-timing-function: ease-out;
 						}
 					`}
 				</Style>
