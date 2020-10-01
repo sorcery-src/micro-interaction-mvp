@@ -50,7 +50,6 @@ const screenID = newID()
 const handleBarDebugID = newID()
 const handleBarID = newID()
 
-// backgroundColor: `hsl(${3.25 * 60}, 100%, 90%)`,
 export default function App() {
 	const [state, actions] = useSorceryReducer()
 
@@ -83,13 +82,13 @@ export default function App() {
 			>
 				{/**/}
 
-				{state.elements.map(each => (
+				{state.activeElement && (
 					<div
-						key={each.id}
-						id={each.id}
+						key={state.activeElement.id}
+						id={state.activeElement.id}
 						style={{
-							...each.style,
-							"--backgroundColor": each.style.backgroundColor,
+							...state.activeElement.style,
+							"--backgroundColor": state.activeElement.style.backgroundColor,
 						}}
 					>
 						<div style={{ position: "relative", height: "100%" }}>
@@ -112,52 +111,56 @@ export default function App() {
 							</CSS>
 
 							<div className={`absolute-debug__${handleBarDebugID}`}>
-								<pre className={`debug__${handleBarDebugID}`}>{each.style.height}px</pre>
+								<pre className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</pre>
 							</div>
 
-							<CSS id={handleBarID}>
-								{css`
-									.absolute-handle-bar__${handleBarID} {
-										padding-top: ${px(8)};
-										position: absolute;
-										top: 100%;
-										right: 0;
-										left: 0;
-										display: flex;
-										justify-content: center;
-										align-items: center;
-									}
-									.handle-bar__${handleBarID} {
-										width: ${px(72)};
-										height: ${px(8)};
-										/* background-color: var(--backgroundColor); */
-										border-radius: 9999px;
-									}
-									.handle-bar__${handleBarID} {
-										background-color: var(--backgroundColor);
-										transform: scale(1);
-										transition-property: transform, background-color;
-										transition-duration: 100ms;
-										transition-timing-function: ease-out;
-									}
-									.handle-bar__${handleBarID}:hover {
-										background-color: var(--backgroundColor);
-										transform: scale(1.1);
-										transition-property: transform, background-color;
-										transition-duration: 100ms;
-										transition-timing-function: ease-out;
-									}
-								`}
-							</CSS>
+							{state.activeElement.focused && (
+								<>
+									<CSS id={handleBarID}>
+										{css`
+											.absolute-handle-bar__${handleBarID} {
+												padding-top: ${px(8)};
+												position: absolute;
+												top: 100%;
+												right: 0;
+												left: 0;
+												display: flex;
+												justify-content: center;
+												align-items: center;
+											}
+											.handle-bar__${handleBarID} {
+												width: ${px(72)};
+												height: ${px(8)};
+												/* background-color: var(--backgroundColor); */
+												border-radius: 9999px;
+											}
+											.handle-bar__${handleBarID} {
+												background-color: var(--backgroundColor);
+												transform: scale(1);
+												transition-property: transform, background-color;
+												transition-duration: 100ms;
+												transition-timing-function: ease-out;
+											}
+											.handle-bar__${handleBarID}:hover {
+												background-color: var(--backgroundColor);
+												transform: scale(1.1);
+												transition-property: transform, background-color;
+												transition-duration: 100ms;
+												transition-timing-function: ease-out;
+											}
+										`}
+									</CSS>
 
-							<div className={`absolute-handle-bar__${handleBarID}`}>
-								<div className={`handle-bar__${handleBarID}`} />
-							</div>
+									<div className={`absolute-handle-bar__${handleBarID}`}>
+										<div className={`handle-bar__${handleBarID}`} />
+									</div>
+								</>
+							)}
 
 							{/**/}
 						</div>
 					</div>
-				))}
+				)}
 
 				<Debug debug={state} />
 			</div>

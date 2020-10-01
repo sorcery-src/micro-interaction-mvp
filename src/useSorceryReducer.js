@@ -5,43 +5,45 @@ const methods = state => ({
 	handlePointerDown() {
 		state.pointer.down = true
 
-		let offset = 0
-		if (state.elements.length > 0) {
-			offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
-		}
+		// let offset = 0
+		// if (state.elements.length > 0) {
+		// 	offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
+		// }
 
-		const height = state.pointer.y - 8 - 8 / 2 - offset
-		state.elements.push({
+		const height = state.pointer.y - 8 - 8 / 2 // - offset
+		state.activeElement = {
 			id: uuidv4().slice(0, 6),
+			focused: true,
 			style: {
 				display: "block",
 				width: "100%",
 				maxWidth: "100%",
 				height,
-				backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 100%, 90%)`,
+				// backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 100%, 90%)`,
+				backgroundColor: `hsl(${3.25 * 60}, 100%, 90%)`,
 			},
-		})
+		}
 	},
 
 	handlePointerMove({ x, y }) {
 		state.pointer.x = x
 		state.pointer.y = y
 		if (state.pointer.down) {
-			if (state.elements.length > 0) {
-				// NOTE: Use state.elements.length > 1.
-				let offset = 0
-				if (state.elements.length > 1) {
-					offset = state.elements.slice(0, -1).reduce((acc, each) => acc + each.style.height, 0)
-				}
-
-				const height = Math.max(0, state.pointer.y - 8 - 8 / 2 - offset)
-				state.elements[state.elements.length - 1].style.height = height
-			}
+			// if (state.elements.length > 0) {
+			// // NOTE: Use state.elements.length > 1.
+			// let offset = 0
+			// if (state.elements.length > 1) {
+			// 	offset = state.elements.slice(0, -1).reduce((acc, each) => acc + each.style.height, 0)
+			// }
+			const height = Math.max(0, state.pointer.y - 8 - 8 / 2 /* - offset */)
+			state.activeElement.style.height = height
+			// }
 		}
 	},
 
 	handlePointerUp() {
 		state.pointer.down = false
+		state.activeElement.focused = false
 	},
 })
 
@@ -51,7 +53,8 @@ const initialState = {
 		x: 0,
 		y: 0,
 	},
-	elements: [],
+	activeElement: null,
+	// elements: [],
 }
 
 export default function useSorceryReducer() {
