@@ -34,13 +34,14 @@ function Debug({ debug }) {
 						width: ${px(320)};
 					}
 					.debug__${debugID} {
-						font-size: ${px(14)};
+						white-space: pre;
+						font-family: monospace;
 					}
 				`}
 			</CSS>
 
 			<div className={`debugAbsoluteContext__${debugID}`}>
-				<pre className={`debug__${debugID}`}>{JSON.stringify(debug, null, 2)}</pre>
+				<div className={`debug__${debugID}`}>{JSON.stringify(debug, null, 2)}</div>
 			</div>
 		</>
 	)
@@ -170,6 +171,7 @@ export default function App() {
 										user-select: none;
 									}
 									.debug__${handleBarDebugID} {
+										white-space: pre;
 										font-family: monospace;
 									}
 								`}
