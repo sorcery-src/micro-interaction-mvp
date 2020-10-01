@@ -57,7 +57,7 @@ export default function App() {
 	React.useEffect(
 		React.useCallback(() => {
 			const id = setTimeout(() => {
-				const element = document.querySelector("[class^='handleBarHitArea']")
+				const element = document.querySelector("[class^='handleBarFocusable']")
 				if (element) {
 					if (state.activeElement.focusState.handleBar) {
 						element.focus()
@@ -117,10 +117,13 @@ export default function App() {
 							}
 						}}
 						onKeyDown={e => {
-							if (e.key === "Backspace" || e.keyCode === 8) {
+							if (e.key === "Shift" || e.keyCode === 16) {
+								actions.keyDownShiftKeyActiveElement()
+							} else if (e.key === "Backspace" || e.keyCode === 8) {
 								actions.keyDownDeleteActiveElement()
 							}
 						}}
+						onKeyUp={actions.keyUpActiveElement}
 						data-focus={state.activeElement.focusState.element}
 						tabIndex={0}
 					>
@@ -160,13 +163,13 @@ export default function App() {
 												justify-content: center;
 												align-items: center;
 											}
-											.handleBarHitArea__${handleBarID} {
+											.handleBarFocusable__${handleBarID} {
 												padding-top: ${px(6)};
 												padding-right: ${px(6)};
 												padding-bottom: ${px(6)};
 												padding-left: ${px(6)};
 											}
-											.handleBarHitArea__${handleBarID}:focus {
+											.handleBarFocusable__${handleBarID}:focus {
 												outline: none;
 											}
 											.handleBar__${handleBarID} {
@@ -175,7 +178,7 @@ export default function App() {
 												border-radius: 9999px;
 												background-color: hsl(${3.25 * 60}, 100%, 90%);
 											}
-											.handleBarHitArea__${handleBarID}[data-focus="true"] .handleBar__${handleBarID} {
+											.handleBarFocusable__${handleBarID}[data-focus="true"] .handleBar__${handleBarID} {
 												background-color: hsl(${3.25 * 60}, 100%, 80%);
 											}
 										`}
@@ -183,7 +186,7 @@ export default function App() {
 
 									<div className={`handleBarAbsoluteContext__${handleBarID}`}>
 										<div
-											className={`handleBarHitArea__${handleBarID}`}
+											className={`handleBarFocusable__${handleBarID}`}
 											onFocus={actions.focusActiveElementHandleBar}
 											onBlur={actions.blurActiveElementHandleBar}
 											data-focus={state.activeElement.focusState.handleBar}

@@ -1,9 +1,13 @@
 import useMethods from "use-methods"
 import { v4 as uuidv4 } from "uuid"
 
+// function quantize(number) {
+// 	return Math.floor(number / 2)
+// }
+
 const methods = state => ({
 	handlePointerDown() {
-		state.pointer.down = true
+		state.pointer.active = true
 
 		const height = state.pointer.y - 6 - 6 / 2 // - offset
 		if (!state.activeElement) {
@@ -45,13 +49,19 @@ const methods = state => ({
 		state.pointer.x = x
 		state.pointer.y = y
 
-		// TODO: Check state.activeElement.focusState.element?
-		if (state.pointer.down && state.activeElement.focusState.handleBar) {
-			const height = Math.max(0, state.pointer.y - 6 - 6 / 2 /* - offset */)
-			state.activeElement.style.height = height
+		function quantize(number) {
+			return Math.max(0, Math.floor(number / 16) * 16)
 		}
 
-		// if (state.pointer.down) {
+		// TODO: Check state.activeElement.focusState.element?
+		if (state.pointer.active && state.activeElement.focusState.handleBar) {
+			const height = Math.max(0, state.pointer.y - 6 - 6 / 2 /* - offset */)
+
+			const fn = !state.keys.shift ? n => n : quantize
+			state.activeElement.style.height = fn(height)
+		}
+
+		// if (state.pointer.active) {
 		// 	// if (state.elements.length > 0) {
 		// 	// // NOTE: Use state.elements.length > 1.
 		// 	// let offset = 0
@@ -65,25 +75,28 @@ const methods = state => ({
 	},
 
 	handlePointerUp() {
-		state.pointer.down = false
+		state.pointer.active = false
 		// this.blurActiveElement()
 	},
 
 	focusActiveElement() {
 		state.activeElement.focusState.element = true
-		// state.activeElement.focusState.handleBar = false
 	},
 	blurActiveElement() {
 		state.activeElement.focusState.element = false
-		// state.activeElement.focusState.handleBar = false
 	},
 	focusActiveElementHandleBar() {
-		// state.activeElement.focusState.element = false
 		state.activeElement.focusState.handleBar = true
 	},
 	blurActiveElementHandleBar() {
-		// state.activeElement.focusState.element = false
 		state.activeElement.focusState.handleBar = false
+	},
+
+	keyDownShiftKeyActiveElement() {
+		state.keys.shift = true
+	},
+	keyUpActiveElement() {
+		state.keys.shift = false
 	},
 
 	keyDownDeleteActiveElement() {
@@ -93,9 +106,12 @@ const methods = state => ({
 
 const initialState = {
 	pointer: {
-		down: false,
+		active: false,
 		x: 0,
 		y: 0,
+	},
+	keys: {
+		shift: false,
 	},
 	activeElement: null,
 	// elements: [],
