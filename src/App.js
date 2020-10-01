@@ -163,10 +163,10 @@ export default function App() {
 										padding-bottom: ${px(8)};
 										padding-left: ${px(8)};
 										position: absolute;
-										top: ${state.activeElement.style.height < 24 ? "100%" : "auto"};
+										top: ${state.activeElement.style.height < 32 ? "100%" : "auto"};
 										right: 0;
 										/* NOTE: "0" must be a string (why?). */
-										bottom: ${state.activeElement.style.height < 24 ? "auto" : "0"};
+										bottom: ${state.activeElement.style.height < 32 ? "auto" : "0"};
 										user-select: none;
 									}
 									.debug__${handleBarDebugID} {
