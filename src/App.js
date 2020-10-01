@@ -5,64 +5,26 @@ import css from "tpl"
 import Style from "Style"
 import useOnceID from "useOnceID"
 
-// function Box({ children, ...props }) {
-// 	const uuid = useOnceID()
+// function Rect({ children, ...props }) {
+// 	const rectID = useOnceID()
 //
 // 	return (
-// 		<div className={`box__${uuid}`} {...props}>
-// 			<Style id={uuid}>
+// 		<>
+// 			<Style id={rectID}>
 // 				{css`
-// 					.box__${uuid} {
-// 						width: ${320 / 16}rem;
-// 						height: ${320 / 16}rem;
+// 					.rect__${rectID} {
 // 						background-color: hsl(${3.25 * 60}, 100%, 90%);
 // 					}
 // 				`}
 // 			</Style>
-// 			{children}
-// 		</div>
+//
+// 			<div className={`rect__${rectID}`} {...props}>
+// 				{children}
+// 			</div>
+// 		</>
 // 	)
 // }
 //
-// function Center({ children, ...props }) {
-// 	const uuid = useOnceID()
-//
-// 	return (
-// 		<div className={`center__${uuid}`} {...props}>
-// 			<Style id={uuid}>
-// 				{css`
-// 					.center__${uuid} {
-// 						display: flex;
-// 						justify-content: center;
-// 						align-items: center;
-// 					}
-// 				`}
-// 			</Style>
-// 			{children}
-// 		</div>
-// 	)
-// }
-
-function Rect({ children, ...props }) {
-	const rectID = useOnceID()
-
-	return (
-		<>
-			<Style id={rectID}>
-				{css`
-					.rect__${rectID} {
-						background-color: hsl(${3.25 * 60}, 100%, 90%);
-					}
-				`}
-			</Style>
-
-			<div className={`rect__${rectID}`} {...props}>
-				{children}
-			</div>
-		</>
-	)
-}
-
 function Debug({ debug, ...props }) {
 	const debugID = useOnceID()
 	const debugPreID = useOnceID()
@@ -113,6 +75,8 @@ export default function App() {
 			}))
 	}, [setState])
 
+	const rectID = useOnceID()
+
 	return (
 		<div
 			style={{ height: "100vh" }}
@@ -133,7 +97,17 @@ export default function App() {
 				})
 			}}
 		>
-			<Rect style={{ height: `${60 / 16}rem` }} />
+			{/* #rect */}
+			<Style id={rectID}>
+				{css`
+					.rect__${rectID} {
+						height: ${state.y / 16}rem;
+						background-color: hsl(${3.25 * 60}, 100%, 90%);
+					}
+				`}
+			</Style>
+
+			<div className={`rect__${rectID}`} />
 
 			<Debug debug={state} />
 		</div>
