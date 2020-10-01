@@ -26,6 +26,13 @@ const methods = state => ({
 	handlePointerMove({ x, y }) {
 		state.pointer.x = x
 		state.pointer.y = y
+
+		// TODO: Check state.activeElement.focusState.element?
+		if (state.pointer.down && state.activeElement.focusState.handleBar) {
+			const height = Math.max(0, state.pointer.y - 8 - 8 / 2 /* - offset */)
+			state.activeElement.style.height = height
+		}
+
 		// if (state.pointer.down) {
 		// 	// if (state.elements.length > 0) {
 		// 	// // NOTE: Use state.elements.length > 1.
@@ -48,7 +55,7 @@ const methods = state => ({
 		state.activeElement.focusState.element = true
 	},
 	focusActiveElementHandleBar() {
-		state.activeElement.focusState.element = true // TODO
+		// state.activeElement.focusState.element = true // TODO
 		state.activeElement.focusState.handleBar = true
 	},
 	blurActiveElement() {

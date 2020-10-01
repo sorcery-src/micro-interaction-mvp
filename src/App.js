@@ -90,10 +90,7 @@ export default function App() {
 					<div
 						className={`activeElement__${activeElementID}`}
 						style={state.activeElement.style}
-						onFocus={e => {
-							// console.log({ ...e })
-							actions.focusActiveElement()
-						}}
+						onFocus={actions.focusActiveElement}
 						onBlur={e => {
 							if (!e.target.contains(e.relatedTarget)) {
 								actions.blurActiveElement()
@@ -166,14 +163,8 @@ export default function App() {
 									<div className={`absoluteHandleBar__${handleBarID}`}>
 										<div
 											className={`handleBar__${handleBarID}`}
-											// onFocus={e => {
-											// 	e.preventDefault()
-											// 	e.stopPropagation()
-											// }}
-											// onBlur={e => {
-											// 	e.preventDefault()
-											// 	e.stopPropagation()
-											// }}
+											onFocus={actions.focusActiveElementHandleBar}
+											onBlur={actions.focusActiveElement}
 											tabIndex={0}
 										/>
 									</div>
