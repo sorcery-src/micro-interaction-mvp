@@ -49,8 +49,30 @@ const methods = state => ({
 		state.pointer.x = x
 		state.pointer.y = y
 
-		function quantize(number) {
-			return Math.max(0, Math.floor(number / 16) * 16)
+		function quantize(n) {
+			// return Math.max(0, Math.floor(number / 16) * 16)
+			if (n > 2 && n < 4) {
+				return 2
+			} else if (n > 4 && n < 8) {
+				return 4
+			} else if (n > 8 && n < 16) {
+				return 8
+			} else if (n > 16 && n < 32) {
+				return 16
+			} else if (n > 32 && n < 64) {
+				return 32
+			} else if (n > 64 && n < 128) {
+				return 64
+			} else if (n > 128 && n < 256) {
+				return 128
+			} else if (n > 256 && n < 512) {
+				return 256
+			} else if (n > 512 && n < 1024) {
+				return 512
+			} else if (n > 1024 && n < 2048) {
+				return 1024
+			}
+			return n
 		}
 
 		// TODO: Check state.activeElement.focusState.element?
@@ -92,11 +114,15 @@ const methods = state => ({
 		state.activeElement.focusState.handleBar = false
 	},
 
-	keyDownShiftKeyActiveElement() {
+	keyDownShiftActiveElement() {
 		state.keys.shift = true
+	},
+	keyDownAltActiveElement() {
+		state.keys.alt = true
 	},
 	keyUpActiveElement() {
 		state.keys.shift = false
+		state.keys.alt = false
 	},
 
 	keyDownDeleteActiveElement() {
@@ -112,6 +138,7 @@ const initialState = {
 	},
 	keys: {
 		shift: false,
+		alt: false,
 	},
 	activeElement: null,
 	// elements: [],

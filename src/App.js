@@ -118,7 +118,9 @@ export default function App() {
 						}}
 						onKeyDown={e => {
 							if (e.key === "Shift" || e.keyCode === 16) {
-								actions.keyDownShiftKeyActiveElement()
+								actions.keyDownShiftActiveElement()
+							} else if (e.key === "Alt" || e.keyCode === 18) {
+								actions.keyDownAltActiveElement()
 							} else if (e.key === "Backspace" || e.keyCode === 8) {
 								actions.keyDownDeleteActiveElement()
 							}
