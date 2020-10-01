@@ -49,14 +49,31 @@ const screenID = newID()
 const rectID = newID()
 
 export default function App() {
-	const [state, methods] = useMethods(
+	const [state, actions] = useMethods(
 		state => ({
-			setPointerDown(down) {
-				state.pointer.down = down
+			handlePointerDown() {
+				state.pointer.down = true
+				state.activeElement = {
+					id: uuidv4(),
+					style: {
+						display: "block",
+						width: "100%",
+						maxWidth: "100%",
+						height: state.pointer.y,
+						backgroundColor: `hsl(${3.25 * 60}, 100%, 90%)`,
+					},
+				}
 			},
-			setPointerXY({ x, y }) {
+			handlePointerMove({ x, y }) {
 				state.pointer.x = x
 				state.pointer.y = y
+
+				if (state.pointer.down) {
+					state.activeElement.style.height = state.pointer.y
+				}
+			},
+			handlePointerUp() {
+				state.pointer.down = false
 			},
 		}),
 		{
@@ -65,6 +82,7 @@ export default function App() {
 				x: 0,
 				y: 0,
 			},
+			activeElement: null,
 		},
 	)
 
@@ -83,66 +101,21 @@ export default function App() {
 			<div
 				className={`screen__${screenID}`}
 				onPointerDown={e => {
-					methods.setPointerDown(true)
+					actions.handlePointerDown()
 				}}
 				onPointerMove={e => {
-					methods.setPointerXY({
+					actions.handlePointerMove({
 						x: Math.round(e.clientX),
 						y: Math.round(e.clientY),
 					})
 				}}
 				onPointerUp={e => {
-					methods.setPointerDown(false)
+					actions.handlePointerUp()
 				}}
 			>
 				{/**/}
 
-				{state.pointer.down && (
-					<>
-						<CSS id={rectID}>
-							{css`
-								.rect__${rectID} {
-									position: relative;
-									height: ${!state.pointer.down ? "auto" : `calc(${px(state.pointer.y)} - ${px(8)} - ${px(8 / 2)})`};
-									background-color: hsl(${3.25 * 60}, 100%, 90%);
-								}
-								.rect-absolute__${rectID} {
-									padding: ${px(8)};
-									position: absolute;
-									top: 100%;
-									right: 0;
-									left: 0;
-									display: flex;
-									justify-content: center;
-									align-items: center;
-								}
-								.rect-absolute-handle__${rectID} {
-									width: ${px(72)};
-									height: ${px(8)};
-									background-color: hsl(${3.25 * 60}, 100%, 90%);
-									border-radius: 9999px;
-									transform: scale(1);
-									transition-property: transform, background-color;
-									transition-duration: 100ms;
-									transition-timing-function: ease-out;
-								}
-								.rect-absolute-handle__${rectID}:hover {
-									background-color: hsl(${3.25 * 60}, 100%, 75%);
-									transform: scale(1.1);
-									transition-property: transform, background-color;
-									transition-duration: 100ms;
-									transition-timing-function: ease-out;
-								}
-							`}
-						</CSS>
-
-						<div className={`rect__${rectID}`}>
-							<div className={`rect-absolute__${rectID}`}>
-								<div className={`rect-absolute-handle__${rectID}`} />
-							</div>
-						</div>
-					</>
-				)}
+				{state.activeElement && <div id={state.activeElement.id} style={state.activeElement.style} />}
 
 				<Debug debug={state} />
 
@@ -153,3 +126,48 @@ export default function App() {
 		</>
 	)
 }
+
+// <>
+// 	<CSS id={rectID}>
+// 		{css`
+// 			.rect__${rectID} {
+// 				position: relative;
+// 				height: ${!state.pointer.down ? "auto" : `calc(${px(state.pointer.y)} - ${px(8)} - ${px(8 / 2)})`};
+// 				background-color: hsl(${3.25 * 60}, 100%, 90%);
+// 			}
+// 			.rect-absolute__${rectID} {
+// 				padding: ${px(8)};
+// 				position: absolute;
+// 				top: 100%;
+// 				right: 0;
+// 				left: 0;
+// 				display: flex;
+// 				justify-content: center;
+// 				align-items: center;
+// 			}
+// 			.rect-absolute-handle__${rectID} {
+// 				width: ${px(72)};
+// 				height: ${px(8)};
+// 				background-color: hsl(${3.25 * 60}, 100%, 90%);
+// 				border-radius: 9999px;
+// 				transform: scale(1);
+// 				transition-property: transform, background-color;
+// 				transition-duration: 100ms;
+// 				transition-timing-function: ease-out;
+// 			}
+// 			.rect-absolute-handle__${rectID}:hover {
+// 				background-color: hsl(${3.25 * 60}, 100%, 75%);
+// 				transform: scale(1.1);
+// 				transition-property: transform, background-color;
+// 				transition-duration: 100ms;
+// 				transition-timing-function: ease-out;
+// 			}
+// 		`}
+// 	</CSS>
+//
+// 	<div className={`rect__${rectID}`}>
+// 		<div className={`rect-absolute__${rectID}`}>
+// 			<div className={`rect-absolute-handle__${rectID}`} />
+// 		</div>
+// 	</div>
+// </>
