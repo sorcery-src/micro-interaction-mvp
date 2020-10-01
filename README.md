@@ -5,7 +5,7 @@
 - [x] Can we select an element?
 - [x] Can we resize an element?
 - [x] Can we delete an element?
-- [ ] Can we use discretized units for resizing? (e.g. active during `shift`)
+- [x] Can we use discretized units for resizing? (e.g. active during `shift`)
 - [ ] Can we show hints for 100% height? (e.g. snap to edge)
 - [ ] ~~Can we show error messages for things like negative height? (e.g. toast UIs)~~
 - [ ] Can we add a history stack? (e.g. undo, redo)
