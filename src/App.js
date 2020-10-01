@@ -46,36 +46,47 @@ function Debug({ debug }) {
 }
 
 const screenID = newID()
-const handleBarID = newID()
+const handleID = newID()
 
 export default function App() {
 	const [state, actions] = useMethods(
 		state => ({
 			handlePointerDown() {
 				state.pointer.down = true
-				state.activeElement = {
+
+				let offset = 0
+				if (state.elements.length > 0) {
+					offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
+				}
+
+				state.elements.push({
 					id: uuidv4(),
 					style: {
 						display: "block",
 						width: "100%",
 						maxWidth: "100%",
-						height: state.pointer.y - 8 - 8 / 2,
-						backgroundColor: `hsl(${3.25 * 60}, 100%, 90%)`,
+						height: state.pointer.y - 8 - 8 / 2 - offset,
+						// backgroundColor: `hsl(${3.25 * 60}, 100%, 90%)`,
+						backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 100%, 90%)`,
 					},
-				}
+				})
 			},
 			handlePointerMove({ x, y }) {
 				state.pointer.x = x
 				state.pointer.y = y
-
 				if (state.pointer.down) {
-					state.activeElement.style.height = state.pointer.y - 8 - 8 / 2
+					if (state.elements.length > 0) {
+						// NOTE: Use state.elements.length > 1.
+						let offset = 0
+						if (state.elements.length > 1) {
+							offset = state.elements.slice(0, -1).reduce((acc, each) => acc + each.style.height, 0)
+						}
+						state.elements[state.elements.length - 1].style.height = state.pointer.y - 8 - 8 / 2 - offset
+					}
 				}
 			},
 			handlePointerUp() {
 				state.pointer.down = false
-
-				// state.activeElement = null
 			},
 		}),
 		{
@@ -84,7 +95,8 @@ export default function App() {
 				x: 0,
 				y: 0,
 			},
-			activeElement: null,
+			// activeElementIndex: -1,
+			elements: [],
 		},
 	)
 
@@ -117,17 +129,17 @@ export default function App() {
 			>
 				{/**/}
 
-				{state.activeElement && (
-					<div id={state.activeElement.id} style={state.activeElement.style}>
+				{state.elements.map(each => (
+					<div id={each.id} style={each.style}>
 						{/**/}
 
-						<CSS id={handleBarID}>
+						<CSS id={handleID}>
 							{css`
-								.relative__${handleBarID} {
+								.relative__${handleID} {
 									position: relative;
 									height: 100%;
 								}
-								.absolute__${handleBarID} {
+								.absolute__${handleID} {
 									padding: ${px(8)};
 									position: absolute;
 									top: 100%;
@@ -137,7 +149,7 @@ export default function App() {
 									justify-content: center;
 									align-items: center;
 								}
-								.handle-bar__${handleBarID} {
+								.handle__${handleID} {
 									width: ${px(72)};
 									height: ${px(8)};
 									background-color: hsl(${3.25 * 60}, 100%, 90%);
@@ -147,7 +159,7 @@ export default function App() {
 									transition-duration: 100ms;
 									transition-timing-function: ease-out;
 								}
-								.handle-bar__${handleBarID}:hover {
+								.handle__${handleID}:hover {
 									background-color: hsl(${3.25 * 60}, 100%, 75%);
 									transform: scale(1.1);
 									transition-property: transform, background-color;
@@ -157,19 +169,18 @@ export default function App() {
 							`}
 						</CSS>
 
-						<div className={`relative__${handleBarID}`}>
-							<div className={`absolute__${handleBarID}`}>
-								<div className={`handle-bar__${handleBarID}`} />
+						{/* {state.activeElement.focused && ( */}
+						<div className={`relative__${handleID}`}>
+							<div className={`absolute__${handleID}`}>
+								<div className={`handle__${handleID}`} />
 							</div>
 						</div>
 
 						{/**/}
 					</div>
-				)}
+				))}
 
 				<Debug debug={state} />
-
-				{/**/}
 			</div>
 
 			{/**/}
