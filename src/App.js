@@ -59,7 +59,7 @@ export default function App() {
 			if (e.key === "Shift" || e.keyCode === 16 || e.shiftKey) {
 				actions.keyDownShift()
 			} else if (e.key === "Backspace" || e.keyCode === 8) {
-				actions.keyDownDelete()
+				actions.keyDownDeleteActiveElement()
 			}
 		}
 		document.addEventListener("keydown", handler)
