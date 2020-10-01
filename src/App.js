@@ -22,7 +22,7 @@ function Debug({ debug }) {
 		<>
 			<CSS id={debugID}>
 				{css`
-					.debug-absolute__${debugID} {
+					.absolute__${debugID} {
 						padding-top: ${px(12)};
 						padding-right: ${px(12)};
 						padding-bottom: ${px(12)};
@@ -32,21 +32,21 @@ function Debug({ debug }) {
 						left: 0;
 						width: ${px(320)};
 					}
-					.debug-absolute-pre__${debugID} {
+					.pre__${debugID} {
 						font-size: ${px(14)};
 					}
 				`}
 			</CSS>
 
-			<div className={`debug-absolute__${debugID}`}>
-				<pre className={`debug-absolute-pre__${debugID}`}>{JSON.stringify(debug, null, 2)}</pre>
+			<div className={`absolute__${debugID}`}>
+				<pre className={`pre__${debugID}`}>{JSON.stringify(debug, null, 2)}</pre>
 			</div>
 		</>
 	)
 }
 
 const screenID = newID()
-const rectID = newID()
+const handleBarID = newID()
 
 export default function App() {
 	const [state, actions] = useMethods(
@@ -59,7 +59,7 @@ export default function App() {
 						display: "block",
 						width: "100%",
 						maxWidth: "100%",
-						height: state.pointer.y,
+						height: state.pointer.y - 8 - 8 / 2,
 						backgroundColor: `hsl(${3.25 * 60}, 100%, 90%)`,
 					},
 				}
@@ -69,11 +69,13 @@ export default function App() {
 				state.pointer.y = y
 
 				if (state.pointer.down) {
-					state.activeElement.style.height = state.pointer.y
+					state.activeElement.style.height = state.pointer.y - 8 - 8 / 2
 				}
 			},
 			handlePointerUp() {
 				state.pointer.down = false
+
+				// state.activeElement = null
 			},
 		}),
 		{
@@ -115,7 +117,55 @@ export default function App() {
 			>
 				{/**/}
 
-				{state.activeElement && <div id={state.activeElement.id} style={state.activeElement.style} />}
+				{state.activeElement && (
+					<div id={state.activeElement.id} style={state.activeElement.style}>
+						{/**/}
+
+						<CSS id={handleBarID}>
+							{css`
+								.relative__${handleBarID} {
+									position: relative;
+									height: 100%;
+								}
+								.absolute__${handleBarID} {
+									padding: ${px(8)};
+									position: absolute;
+									top: 100%;
+									right: 0;
+									left: 0;
+									display: flex;
+									justify-content: center;
+									align-items: center;
+								}
+								.handle-bar__${handleBarID} {
+									width: ${px(72)};
+									height: ${px(8)};
+									background-color: hsl(${3.25 * 60}, 100%, 90%);
+									border-radius: 9999px;
+									transform: scale(1);
+									transition-property: transform, background-color;
+									transition-duration: 100ms;
+									transition-timing-function: ease-out;
+								}
+								.handle-bar__${handleBarID}:hover {
+									background-color: hsl(${3.25 * 60}, 100%, 75%);
+									transform: scale(1.1);
+									transition-property: transform, background-color;
+									transition-duration: 100ms;
+									transition-timing-function: ease-out;
+								}
+							`}
+						</CSS>
+
+						<div className={`relative__${handleBarID}`}>
+							<div className={`absolute__${handleBarID}`}>
+								<div className={`handle-bar__${handleBarID}`} />
+							</div>
+						</div>
+
+						{/**/}
+					</div>
+				)}
 
 				<Debug debug={state} />
 
@@ -126,48 +176,3 @@ export default function App() {
 		</>
 	)
 }
-
-// <>
-// 	<CSS id={rectID}>
-// 		{css`
-// 			.rect__${rectID} {
-// 				position: relative;
-// 				height: ${!state.pointer.down ? "auto" : `calc(${px(state.pointer.y)} - ${px(8)} - ${px(8 / 2)})`};
-// 				background-color: hsl(${3.25 * 60}, 100%, 90%);
-// 			}
-// 			.rect-absolute__${rectID} {
-// 				padding: ${px(8)};
-// 				position: absolute;
-// 				top: 100%;
-// 				right: 0;
-// 				left: 0;
-// 				display: flex;
-// 				justify-content: center;
-// 				align-items: center;
-// 			}
-// 			.rect-absolute-handle__${rectID} {
-// 				width: ${px(72)};
-// 				height: ${px(8)};
-// 				background-color: hsl(${3.25 * 60}, 100%, 90%);
-// 				border-radius: 9999px;
-// 				transform: scale(1);
-// 				transition-property: transform, background-color;
-// 				transition-duration: 100ms;
-// 				transition-timing-function: ease-out;
-// 			}
-// 			.rect-absolute-handle__${rectID}:hover {
-// 				background-color: hsl(${3.25 * 60}, 100%, 75%);
-// 				transform: scale(1.1);
-// 				transition-property: transform, background-color;
-// 				transition-duration: 100ms;
-// 				transition-timing-function: ease-out;
-// 			}
-// 		`}
-// 	</CSS>
-//
-// 	<div className={`rect__${rectID}`}>
-// 		<div className={`rect-absolute__${rectID}`}>
-// 			<div className={`rect-absolute-handle__${rectID}`} />
-// 		</div>
-// 	</div>
-// </>
