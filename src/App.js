@@ -100,46 +100,50 @@ export default function App() {
 			>
 				{/**/}
 
-				<Style id={rectID}>
-					{css`
-						.rect__${rectID} {
-							position: relative;
-							height: ${!state.down ? "auto" : px(state.y - 8 /* padding */ - 10 / 2 /* height */)};
-							background-color: hsl(${3.25 * 60}, 100%, 90%);
-						}
-						.rect-absolute__${rectID} {
-							padding: ${px(8)};
-							position: absolute;
-							top: 100%;
-							right: 0;
-							left: 0;
-							display: flex;
-							justify-content: center;
-							align-items: center;
-						}
-						.rect-absolute-handle__${rectID} {
-							width: ${px(80)};
-							height: ${px(10)};
-							background-color: hsl(${3.25 * 60}, 100%, 90%);
-							border-radius: 9999px;
-							transition-property: background-color;
-							transition-duration: 100ms;
-							transition-timing-function: ease-out;
-						}
-						.rect-absolute-handle__${rectID}:hover {
-							background-color: hsl(${3.25 * 60}, 100%, 75%);
-							transition-property: background-color;
-							transition-duration: 100ms;
-							transition-timing-function: ease-out;
-						}
-					`}
-				</Style>
+				{state.down && (
+					<>
+						<Style id={rectID}>
+							{css`
+								.rect__${rectID} {
+									position: relative;
+									height: ${!state.down ? "auto" : `calc(${px(state.y)} - ${px(8)} - ${px(10 / 2)})`};
+									background-color: hsl(${3.25 * 60}, 100%, 90%);
+								}
+								.rect-absolute__${rectID} {
+									padding: ${px(8)};
+									position: absolute;
+									top: 100%;
+									right: 0;
+									left: 0;
+									display: flex;
+									justify-content: center;
+									align-items: center;
+								}
+								.rect-absolute-handle__${rectID} {
+									width: ${px(80)};
+									height: ${px(10)};
+									background-color: hsl(${3.25 * 60}, 100%, 90%);
+									border-radius: 9999px;
+									transition-property: background-color;
+									transition-duration: 100ms;
+									transition-timing-function: ease-out;
+								}
+								.rect-absolute-handle__${rectID}:hover {
+									background-color: hsl(${3.25 * 60}, 100%, 75%);
+									transition-property: background-color;
+									transition-duration: 100ms;
+									transition-timing-function: ease-out;
+								}
+							`}
+						</Style>
 
-				<div className={`rect__${rectID}`}>
-					<div className={`rect-absolute__${rectID}`}>
-						<div className={`rect-absolute-handle__${rectID}`} />
-					</div>
-				</div>
+						<div className={`rect__${rectID}`}>
+							<div className={`rect-absolute__${rectID}`}>
+								<div className={`rect-absolute-handle__${rectID}`} />
+							</div>
+						</div>
+					</>
+				)}
 
 				<Debug debug={state} />
 
