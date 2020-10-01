@@ -1,3 +1,4 @@
+import detab from "detab"
 import { useLayoutEffect } from "react"
 
 // <Style> renders a <style> element once.
@@ -28,7 +29,7 @@ export default function Style({ id, children: css }) {
 		if (!document.getElementById(id)) {
 			const style = document.createElement("style")
 			style.id = id
-			style.appendChild(document.createTextNode(css))
+			style.appendChild(document.createTextNode(detab(css)))
 			document.head.append(style)
 		}
 		return () => {

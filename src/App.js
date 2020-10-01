@@ -3,10 +3,10 @@
 import * as React from "react"
 import css from "tpl"
 import Style from "Style"
-import useOnceShortID from "useOnceShortID"
+import useOnceID from "useOnceID"
 
 // function Box({ children, ...props }) {
-// 	const uuid = useOnceShortID()
+// 	const uuid = useOnceID()
 //
 // 	return (
 // 		<div className={`box__${uuid}`} {...props}>
@@ -25,7 +25,7 @@ import useOnceShortID from "useOnceShortID"
 // }
 //
 // function Center({ children, ...props }) {
-// 	const uuid = useOnceShortID()
+// 	const uuid = useOnceID()
 //
 // 	return (
 // 		<div className={`center__${uuid}`} {...props}>
@@ -44,19 +44,19 @@ import useOnceShortID from "useOnceShortID"
 // }
 
 function Rect({ children, ...props }) {
-	const uuid = useOnceShortID()
+	const rectID = useOnceID()
 
 	return (
 		<>
-			<Style id={uuid}>
+			<Style id={rectID}>
 				{css`
-					.rect__${uuid} {
+					.rect__${rectID} {
 						background-color: hsl(${3.25 * 60}, 100%, 90%);
 					}
 				`}
 			</Style>
 
-			<div className={`rect__${uuid}`} {...props}>
+			<div className={`rect__${rectID}`} {...props}>
 				{children}
 			</div>
 		</>
@@ -64,8 +64,8 @@ function Rect({ children, ...props }) {
 }
 
 function Debug({ debug, ...props }) {
-	const debugID = useOnceShortID()
-	const debugTextID = useOnceShortID()
+	const debugID = useOnceID()
+	const debugTextID = useOnceID()
 
 	return (
 		<>
@@ -79,6 +79,7 @@ function Debug({ debug, ...props }) {
 						position: absolute;
 						right: 0;
 						bottom: 0;
+						width: ${240 / 16}rem;
 					}
 				`}
 			</Style>

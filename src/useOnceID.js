@@ -15,10 +15,10 @@ function useOnce(once) {
 // Ex:
 //
 // function Component() {
-//   const id = useOnceShortID()
+//   const id = useOnceID("component") // "component__<uuid>"
 //   ...
 // }
 //
-export default function useOnceShortID() {
-	return useOnce(() => uuidv4().slice(0, 6))
+export default function useOnceID(desc) {
+	return useOnce(() => (!desc ? "" : desc + "__") + uuidv4().slice(0, 6))
 }
