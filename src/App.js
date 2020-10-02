@@ -140,16 +140,6 @@ export default function App() {
 								actions.blurActiveElement()
 							}
 						}}
-						// onKeyDown={e => {
-						// 	if (e.key === "Shift" || e.keyCode === 16) {
-						// 		actions.keyDownShift()
-						// 	} else if (e.key === "Alt" || e.keyCode === 18) {
-						// 		actions.keyDownAlt()
-						// 	} else if (e.key === "Backspace" || e.keyCode === 8) {
-						// 		actions.keyDownDelete()
-						// 	}
-						// }}
-						// onKeyUp={actions.keyUpActiveElement}
 						data-focus={state.activeElement.focusState.element}
 						tabIndex={0}
 					>
@@ -166,7 +156,6 @@ export default function App() {
 										position: absolute;
 										top: ${state.activeElement.style.height < 32 ? "100%" : "auto"};
 										right: 0;
-										/* NOTE: "0" must be a string (why?). */
 										bottom: ${state.activeElement.style.height < 32 ? "auto" : "0"};
 										user-select: none;
 									}
