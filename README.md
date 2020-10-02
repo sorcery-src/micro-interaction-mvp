@@ -26,7 +26,7 @@ _Explores UX concepts for creating, resizing, and deleting block elements._
 - [x] Can we use an element’s handle bar to resize an element?
 - [x] Can we focus and delete an element?
 - [x] Can we quantize values? (e.g. `shift`)
-- [ ] Can we snap-to-edge for `height: 100%`?
+- [ ] Can we snap-to-edge for `height: 100%;`?
 
 ### v0.2
 
