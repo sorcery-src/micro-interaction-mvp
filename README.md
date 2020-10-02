@@ -1,10 +1,10 @@
-## 🚧 Sorcery MVP 🚧
+# 🚧 Sorcery MVP 🚧
 
 > _Sorcery makes you a more effective designer and developer. 🔮_
 
 Sorcery makes it possible to create and real-world layouts and skeleton designs, all on the web. No code necessary. 👌
 
-### Features
+## Features
 
 - Design on the web
 - Capture feedback early in the development process
