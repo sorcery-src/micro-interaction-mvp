@@ -2,7 +2,7 @@
 
 **Status: 🚧 MVP 🚧**
 
-> _🔮 Sorcery makes you a more effective designer and developer._
+> _Sorcery makes you a more effective designer and developer. 🔮_
 
 Sorcery makes it possible to create and real-world layouts and skeleton designs all from the browser. No code necessary. 👌
 
