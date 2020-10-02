@@ -2,11 +2,11 @@
 
 > _Sorcery makes you a more effective designer and developer. 🔮_
 
-Sorcery makes it possible to create and real-world layouts and skeleton designs all from the browser. No code necessary. 👌
+Sorcery makes it possible to create and real-world layouts and skeleton designs, all on the web. No code necessary. 👌
 
 ### Features
 
-- Design in the browser
+- Design on the web
 - Capture feedback early in the development process
 - Refactor as needed
 - Export to Figma and frontend code
