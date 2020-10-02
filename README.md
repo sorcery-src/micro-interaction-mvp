@@ -1,4 +1,4 @@
-Sorcery MVP 🚧
+# Sorcery MVP 🚧
 
 > _Sorcery makes you a more effective designer and developer. 🔮_
 
