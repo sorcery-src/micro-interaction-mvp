@@ -13,7 +13,7 @@ Sorcery makes it possible to create and real-world layouts and skeleton designs 
 - Supports HTML construction as React.js, Vue.js
 - Supports CSS construction as Sass, Styled Components, and Tailwind CSS
 
-Contributions are welcome! Feel free to open an issue or submit a pull request.
+**Contributions are welcome! Feel free to open an issue or submit a pull request.**
 
 ## Roadmap
 
