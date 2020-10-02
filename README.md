@@ -1,4 +1,4 @@
-## v0.1 Features
+## v0.1
 
 - [x] Can we create an element?
 - [x] Can we create _many_ elements?
