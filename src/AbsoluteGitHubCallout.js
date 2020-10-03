@@ -8,7 +8,8 @@ const id = createID()
 
 export default function AbsoluteGitHubCallout() {
 	return (
-		<>
+		// TODO: Add {...target_blank}.
+		<a href="https://github.com/sorcery-src/mvp" /* {...target_blank} */>
 			{/**/}
 
 			<StyleOnce id={id}>
@@ -19,7 +20,7 @@ export default function AbsoluteGitHubCallout() {
 						right: 0;
 					}
 					.GitHubCallout__${id} {
-						/* ... */
+						color: hsl(0, 0%, 0%);
 					}
 				`}
 			</StyleOnce>
@@ -29,6 +30,6 @@ export default function AbsoluteGitHubCallout() {
 			</div>
 
 			{/**/}
-		</>
+		</a>
 	)
 }
