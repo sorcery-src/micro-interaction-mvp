@@ -119,7 +119,7 @@ export default function App() {
 	React.useEffect(
 		React.useCallback(() => {
 			const id = setTimeout(() => {
-				const element = document.querySelector("[class^='handleBarFocusable']")
+				const element = document.querySelector("[class^='handleBarHitArea']")
 				if (element) {
 					if (state.activeElement.focusState.handleBar) {
 						element.focus()

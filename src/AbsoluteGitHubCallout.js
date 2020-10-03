@@ -18,6 +18,7 @@ export default function AbsoluteGitHubCallout() {
 						position: absolute;
 						top: 0;
 						right: 0;
+						z-index: 100;
 					}
 					.GitHubCallout__${id} {
 						color: hsl(0, 0%, 0%);
