@@ -32,7 +32,7 @@ function quantize(n) {
 
 const methods = state => ({
 	handlePointerDown() {
-		state.pointer.active = true
+		state.pointer.down = true
 
 		const height = state.pointer.y - handleBarOffset
 		if (!state.activeElement) {
@@ -74,14 +74,14 @@ const methods = state => ({
 		state.pointer.y = y
 
 		// TODO: Check state.activeElement.focusState.element?
-		if (state.pointer.active && state.activeElement.focusState.handleBar) {
+		if (state.pointer.down && state.activeElement.focusState.handleBar) {
 			const height = Math.max(0, state.pointer.y - handleBarOffset)
 
 			const fn = !state.keys.shift ? n => n : quantize
 			state.activeElement.style.height = fn(height)
 		}
 
-		// if (state.pointer.active) {
+		// if (state.pointer.down) {
 		// 	// if (state.elements.length > 0) {
 		// 	// // NOTE: Use state.elements.length > 1.
 		// 	// let offset = 0
@@ -95,7 +95,7 @@ const methods = state => ({
 	},
 
 	handlePointerUp() {
-		state.pointer.active = false
+		state.pointer.down = false
 	},
 
 	focusActiveElement() {
@@ -124,8 +124,11 @@ const methods = state => ({
 })
 
 const initialState = {
+	// window: {
+	// 	height: window.innerHeight, // TODO
+	// },
 	pointer: {
-		active: false,
+		down: false,
 		x: 0,
 		y: 0,
 	},

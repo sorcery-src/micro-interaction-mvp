@@ -250,7 +250,8 @@ export default function App() {
 						</div>
 
 						{/* snapToEdge */}
-						{state.keys.shift && (
+						{/* {state.pointer.y / window.innerHeight >= 0.75 && ( */}
+						{window.innerHeight - state.pointer.y < 64 && (
 							<>
 								{/**/}
 
@@ -268,8 +269,8 @@ export default function App() {
 										}
 										.snapToEdge__${snapToEdgeID} {
 											width: 100%;
-											height: 8px;
-											background-color: red;
+											height: ${px(4)};
+											background-color: hsl(${3.25 * 60}, 100%, 75%);
 										}
 									`}
 								</StyleOnce>
