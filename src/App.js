@@ -11,16 +11,18 @@ import useMethods from "use-methods"
 import useSorceryReducer from "useSorceryReducer"
 import { v4 as uuidv4 } from "uuid"
 
-const debugID = createID()
+/****/
 
-function Debug({ debug }) {
+const debugStateID = createID()
+
+function DebugState({ state }) {
 	return (
 		<>
 			{/**/}
 
-			<StyleOnce id={debugID}>
+			<StyleOnce id={debugStateID}>
 				{css`
-					.absolute__${debugID} {
+					.absolute__${debugStateID} {
 						padding-top: ${px(12)};
 						padding-right: ${px(12)};
 						padding-bottom: ${px(12)};
@@ -30,22 +32,61 @@ function Debug({ debug }) {
 						left: 0;
 						width: ${px(320)};
 					}
-					.debug__${debugID} {
+					.debugState__${debugStateID} {
 						white-space: pre;
 						font-family: monospace;
 					}
 				`}
 			</StyleOnce>
 
-			<div className={`absolute__${debugID}`}>
-				<div className={`debug__${debugID}`}>{JSON.stringify(debug, null, 2)}</div>
+			<div className={`absolute__${debugStateID}`}>
+				<div className={`debugState__${debugStateID}`}>{JSON.stringify(state, null, 2)}</div>
 			</div>
 		</>
 	)
 }
 
+/****/
+
+const debugActiveElementID = createID()
+
+function DebugActiveElement({ activeElement }) {
+	return (
+		<>
+			{/**/}
+
+			<StyleOnce id={debugActiveElementID}>
+				{css`
+					.absolute__${debugActiveElementID} {
+						padding-top: ${px(8)};
+						padding-right: ${px(8)};
+						padding-bottom: ${px(8)};
+						padding-left: ${px(8)};
+						position: absolute;
+						top: ${activeElement.style.height < 32 ? "100%" : "auto"};
+						right: 0;
+						bottom: ${activeElement.style.height < 32 ? "auto" : "0"};
+						user-select: none;
+					}
+					.debugActiveElement__${debugActiveElementID} {
+						white-space: pre;
+						font-family: monospace;
+					}
+				`}
+			</StyleOnce>
+
+			<div className={`absolute__${debugActiveElementID}`}>
+				<div className={`debugActiveElement__${debugActiveElementID}`}>{activeElement.style.height}px</div>
+			</div>
+
+			{/**/}
+		</>
+	)
+}
+
+/****/
+
 const activeElementID = createID()
-const handleBarDebugID = createID()
 const handleBarID = createID()
 
 export default function App() {
@@ -148,29 +189,7 @@ export default function App() {
 							<div style={{ position: "relative", height: "100%" }}>
 								{/**/}
 
-								<StyleOnce id={handleBarDebugID}>
-									{css`
-										.absolute__${handleBarDebugID} {
-											padding-top: ${px(8)};
-											padding-right: ${px(8)};
-											padding-bottom: ${px(8)};
-											padding-left: ${px(8)};
-											position: absolute;
-											top: ${state.activeElement.style.height < 32 ? "100%" : "auto"};
-											right: 0;
-											bottom: ${state.activeElement.style.height < 32 ? "auto" : "0"};
-											user-select: none;
-										}
-										.debug__${handleBarDebugID} {
-											white-space: pre;
-											font-family: monospace;
-										}
-									`}
-								</StyleOnce>
-
-								<div className={`absolute__${handleBarDebugID}`}>
-									<div className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</div>
-								</div>
+								<DebugActiveElement activeElement={state.activeElement} />
 
 								{state.activeElement.focusState.element && (
 									<>
@@ -226,7 +245,7 @@ export default function App() {
 					</>
 				)}
 			</div>
-			<Debug debug={state} />
+			<DebugState state={state} />
 
 			{/**/}
 		</>
