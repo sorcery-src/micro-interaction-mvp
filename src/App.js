@@ -1,15 +1,13 @@
 /* eslint-disable */
 
 import * as React from "react"
+
 import AbsoluteGitHubCallout from "AbsoluteGitHubCallout"
-import createID from "createID"
-import css from "tpl"
-import px from "px"
-import StyleOnce from "./StyleOnce"
-import SVGGitHubCallout from "SVGGitHubCallout"
-import useMethods from "use-methods"
+import StyleOnce from "lib/CSS/StyleOnce"
+import createID from "utils/createID"
+import css from "lib/x/tpl"
+import px from "lib/CSS/px"
 import useSorceryReducer from "useSorceryReducer"
-import { v4 as uuidv4 } from "uuid"
 
 /****/
 
