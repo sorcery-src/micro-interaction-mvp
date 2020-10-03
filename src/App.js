@@ -154,6 +154,8 @@ export default function App() {
 			>
 				{state.activeElement && (
 					<>
+						{/**/}
+
 						<StyleOnce id={activeElementID}>
 							{css`
 								.activeElement__${activeElementID}:focus {
@@ -204,13 +206,13 @@ export default function App() {
 													justify-content: center;
 													align-items: center;
 												}
-												.handleBarFocusable__${handleBarID} {
+												.handleBarHitArea__${handleBarID} {
 													padding-top: ${px(6)};
 													padding-right: ${px(6)};
 													padding-bottom: ${px(6)};
 													padding-left: ${px(6)};
 												}
-												.handleBarFocusable__${handleBarID}:focus {
+												.handleBarHitArea__${handleBarID}:focus {
 													outline: none;
 												}
 												.handleBar__${handleBarID} {
@@ -219,7 +221,7 @@ export default function App() {
 													border-radius: 9999px;
 													background-color: hsl(${3.25 * 60}, 100%, 90%);
 												}
-												.handleBarFocusable__${handleBarID}[data-focus="true"] .handleBar__${handleBarID} {
+												.handleBarHitArea__${handleBarID}[data-focus="true"] .handleBar__${handleBarID} {
 													background-color: hsl(${3.25 * 60}, 100%, 75%);
 												}
 											`}
@@ -227,7 +229,7 @@ export default function App() {
 
 										<div className={`absolute__${handleBarID}`}>
 											<div
-												className={`handleBarFocusable__${handleBarID}`}
+												className={`handleBarHitArea__${handleBarID}`}
 												onFocus={actions.focusActiveElementHandleBar}
 												onBlur={actions.blurActiveElementHandleBar}
 												data-focus={state.activeElement.focusState.handleBar}
@@ -245,6 +247,7 @@ export default function App() {
 					</>
 				)}
 			</div>
+
 			<DebugState state={state} />
 
 			{/**/}
