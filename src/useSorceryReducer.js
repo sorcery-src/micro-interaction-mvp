@@ -106,6 +106,11 @@ const methods = state => ({
 
 	handlePointerUp() {
 		state.pointer.down = false
+
+		if (state.activeElement.snapToEdgeState.bottom) {
+			state.activeElement.style.height = state.window.height
+			state.activeElement.snapToEdgeState.bottom = false // Reset
+		}
 	},
 
 	focusActiveElement() {
