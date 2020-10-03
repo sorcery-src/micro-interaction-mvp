@@ -88,6 +88,7 @@ function DebugActiveElement({ activeElement }) {
 
 const activeElementID = createID()
 const handleBarID = createID()
+const snapToEdgeID = createID()
 
 export default function App() {
 	const [state, actions] = useSorceryReducer()
@@ -156,6 +157,7 @@ export default function App() {
 					<>
 						{/**/}
 
+						{/* activeElement */}
 						<StyleOnce id={activeElementID}>
 							{css`
 								.activeElement__${activeElementID}:focus {
@@ -191,8 +193,10 @@ export default function App() {
 							<div style={{ position: "relative", height: "100%" }}>
 								{/**/}
 
+								{/* debugActiveElement */}
 								<DebugActiveElement activeElement={state.activeElement} />
 
+								{/* activeElement */}
 								{state.activeElement.focusState.element && (
 									<>
 										<StyleOnce id={handleBarID}>
@@ -244,6 +248,43 @@ export default function App() {
 								{/**/}
 							</div>
 						</div>
+
+						{/* snapToEdge */}
+						{state.keys.shift && (
+							<>
+								{/**/}
+
+								<StyleOnce id={snapToEdgeID}>
+									{css`
+										.absolute__${snapToEdgeID} {
+											position: absolute;
+											right: 0;
+											bottom: 0;
+											left: 0;
+										}
+										.center__${snapToEdgeID} {
+											display: flex;
+											justify-content: center;
+										}
+										.snapToEdge__${snapToEdgeID} {
+											width: 100%;
+											height: 8px;
+											background-color: red;
+										}
+									`}
+								</StyleOnce>
+
+								<div className={`absolute__${snapToEdgeID}`}>
+									<div className={`center__${snapToEdgeID}`}>
+										<div className={`snapToEdge__${snapToEdgeID}`} />
+									</div>
+								</div>
+
+								{/**/}
+							</>
+						)}
+
+						{/**/}
 					</>
 				)}
 			</div>
