@@ -6,7 +6,7 @@ Sorcery makes it possible to create and real-world layouts and skeleton designs 
 
 ## Features
 
-- Design HTML layouts and skeleton designs on the web
+- Design layouts and skeleton designs on the web
 - Capture feedback early in the development process
 - Refactor as needed
 - Export to Figma and frontend code
