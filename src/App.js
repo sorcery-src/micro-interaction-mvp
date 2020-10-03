@@ -1,27 +1,24 @@
 /* eslint-disable */
 
 import * as React from "react"
-import CSS from "./CSS" // FIXME
+import AbsoluteGitHubCallout from "AbsoluteGitHubCallout"
+import createID from "createID"
 import css from "tpl"
 import px from "px"
+import StyleOnce from "./StyleOnce"
+import SVGGitHubCallout from "SVGGitHubCallout"
 import useMethods from "use-methods"
 import useSorceryReducer from "useSorceryReducer"
 import { v4 as uuidv4 } from "uuid"
 
-/****/
-
-function newID(desc) {
-	return (!desc ? "" : desc + "__") + uuidv4().slice(0, 6)
-}
-
-/****/
-
-const debugID = newID()
+const debugID = createID()
 
 function Debug({ debug }) {
 	return (
 		<>
-			<CSS id={debugID}>
+			{/**/}
+
+			<StyleOnce id={debugID}>
 				{css`
 					.debugAbsoluteContext__${debugID} {
 						padding-top: ${px(12)};
@@ -38,7 +35,7 @@ function Debug({ debug }) {
 						font-family: monospace;
 					}
 				`}
-			</CSS>
+			</StyleOnce>
 
 			<div className={`debugAbsoluteContext__${debugID}`}>
 				<div className={`debug__${debugID}`}>{JSON.stringify(debug, null, 2)}</div>
@@ -47,9 +44,9 @@ function Debug({ debug }) {
 	)
 }
 
-const activeElementID = newID()
-const handleBarDebugID = newID()
-const handleBarID = newID()
+const activeElementID = createID()
+const handleBarDebugID = createID()
+const handleBarID = createID()
 
 export default function App() {
 	const [state, actions] = useSorceryReducer()
@@ -98,133 +95,140 @@ export default function App() {
 	)
 
 	return (
-		<div
-			style={{ height: "100vh" }}
-			onPointerDown={actions.handlePointerDown}
-			onPointerMove={e => {
-				actions.handlePointerMove({
-					x: Math.round(e.clientX),
-					y: Math.round(e.clientY),
-				})
-			}}
-			onPointerUp={actions.handlePointerUp}
-		>
-			{state.activeElement && (
-				<>
-					<CSS id={activeElementID}>
-						{css`
-							.activeElement__${activeElementID}:focus {
-								outline: none;
-							}
-							.activeElement__${activeElementID}[data-focus="false"] {
-								background-color: hsl(${3.25 * 60}, 100%, 90%);
-								transition-property: background-color;
-								transition-duration: 100ms;
-								transition-timing-function: ease-out;
-							}
-							.activeElement__${activeElementID}[data-focus="true"] {
-								background-color: hsl(${3.25 * 60}, 100%, 75%);
-								transition-property: background-color;
-								transition-duration: 50ms;
-								transition-timing-function: ease-out;
-							}
-						`}
-					</CSS>
+		<>
+			{/**/}
 
-					<div
-						className={`activeElement__${activeElementID}`}
-						style={state.activeElement.style}
-						onFocus={actions.focusActiveElement}
-						onBlur={e => {
-							if (!e.target.contains(e.relatedTarget)) {
-								actions.blurActiveElement()
-							}
-						}}
-						data-focus={state.activeElement.focusState.element}
-						tabIndex={0}
-					>
-						<div style={{ position: "relative", height: "100%" }}>
-							{/**/}
+			<AbsoluteGitHubCallout />
 
-							<CSS id={handleBarDebugID}>
-								{css`
-									.debugAbsoluteContext__${handleBarDebugID} {
-										padding-top: ${px(8)};
-										padding-right: ${px(8)};
-										padding-bottom: ${px(8)};
-										padding-left: ${px(8)};
-										position: absolute;
-										top: ${state.activeElement.style.height < 32 ? "100%" : "auto"};
-										right: 0;
-										bottom: ${state.activeElement.style.height < 32 ? "auto" : "0"};
-										user-select: none;
-									}
-									.debug__${handleBarDebugID} {
-										white-space: pre;
-										font-family: monospace;
-									}
-								`}
-							</CSS>
+			<div
+				style={{ height: "100vh" }}
+				onPointerDown={actions.handlePointerDown}
+				onPointerMove={e => {
+					actions.handlePointerMove({
+						x: Math.round(e.clientX),
+						y: Math.round(e.clientY),
+					})
+				}}
+				onPointerUp={actions.handlePointerUp}
+			>
+				{state.activeElement && (
+					<>
+						<StyleOnce id={activeElementID}>
+							{css`
+								.activeElement__${activeElementID}:focus {
+									outline: none;
+								}
+								.activeElement__${activeElementID}[data-focus="false"] {
+									background-color: hsl(${3.25 * 60}, 100%, 90%);
+									transition-property: background-color;
+									transition-duration: 100ms;
+									transition-timing-function: ease-out;
+								}
+								.activeElement__${activeElementID}[data-focus="true"] {
+									background-color: hsl(${3.25 * 60}, 100%, 75%);
+									transition-property: background-color;
+									transition-duration: 50ms;
+									transition-timing-function: ease-out;
+								}
+							`}
+						</StyleOnce>
 
-							<div className={`debugAbsoluteContext__${handleBarDebugID}`}>
-								<div className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</div>
-							</div>
+						<div
+							className={`activeElement__${activeElementID}`}
+							style={state.activeElement.style}
+							onFocus={actions.focusActiveElement}
+							onBlur={e => {
+								if (!e.target.contains(e.relatedTarget)) {
+									actions.blurActiveElement()
+								}
+							}}
+							data-focus={state.activeElement.focusState.element}
+							tabIndex={0}
+						>
+							<div style={{ position: "relative", height: "100%" }}>
+								{/**/}
 
-							{state.activeElement.focusState.element && (
-								<>
-									<CSS id={handleBarID}>
-										{css`
-											.handleBarAbsoluteContext__${handleBarID} {
-												position: absolute;
-												top: 100%;
-												right: 0;
-												left: 0;
-												display: flex;
-												justify-content: center;
-												align-items: center;
-											}
-											.handleBarFocusable__${handleBarID} {
-												padding-top: ${px(6)};
-												padding-right: ${px(6)};
-												padding-bottom: ${px(6)};
-												padding-left: ${px(6)};
-											}
-											.handleBarFocusable__${handleBarID}:focus {
-												outline: none;
-											}
-											.handleBar__${handleBarID} {
-												width: ${px(72)};
-												height: ${px(6)};
-												border-radius: 9999px;
-												background-color: hsl(${3.25 * 60}, 100%, 90%);
-											}
-											.handleBarFocusable__${handleBarID}[data-focus="true"] .handleBar__${handleBarID} {
-												background-color: hsl(${3.25 * 60}, 100%, 75%);
-											}
-										`}
-									</CSS>
+								<StyleOnce id={handleBarDebugID}>
+									{css`
+										.debugAbsoluteContext__${handleBarDebugID} {
+											padding-top: ${px(8)};
+											padding-right: ${px(8)};
+											padding-bottom: ${px(8)};
+											padding-left: ${px(8)};
+											position: absolute;
+											top: ${state.activeElement.style.height < 32 ? "100%" : "auto"};
+											right: 0;
+											bottom: ${state.activeElement.style.height < 32 ? "auto" : "0"};
+											user-select: none;
+										}
+										.debug__${handleBarDebugID} {
+											white-space: pre;
+											font-family: monospace;
+										}
+									`}
+								</StyleOnce>
 
-									<div className={`handleBarAbsoluteContext__${handleBarID}`}>
-										<div
-											className={`handleBarFocusable__${handleBarID}`}
-											onFocus={actions.focusActiveElementHandleBar}
-											onBlur={actions.blurActiveElementHandleBar}
-											data-focus={state.activeElement.focusState.handleBar}
-											tabIndex={0}
-										>
-											<div className={`handleBar__${handleBarID}`} />
+								<div className={`debugAbsoluteContext__${handleBarDebugID}`}>
+									<div className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</div>
+								</div>
+
+								{state.activeElement.focusState.element && (
+									<>
+										<StyleOnce id={handleBarID}>
+											{css`
+												.handleBarAbsoluteContext__${handleBarID} {
+													position: absolute;
+													top: 100%;
+													right: 0;
+													left: 0;
+													display: flex;
+													justify-content: center;
+													align-items: center;
+												}
+												.handleBarFocusable__${handleBarID} {
+													padding-top: ${px(6)};
+													padding-right: ${px(6)};
+													padding-bottom: ${px(6)};
+													padding-left: ${px(6)};
+												}
+												.handleBarFocusable__${handleBarID}:focus {
+													outline: none;
+												}
+												.handleBar__${handleBarID} {
+													width: ${px(72)};
+													height: ${px(6)};
+													border-radius: 9999px;
+													background-color: hsl(${3.25 * 60}, 100%, 90%);
+												}
+												.handleBarFocusable__${handleBarID}[data-focus="true"] .handleBar__${handleBarID} {
+													background-color: hsl(${3.25 * 60}, 100%, 75%);
+												}
+											`}
+										</StyleOnce>
+
+										<div className={`handleBarAbsoluteContext__${handleBarID}`}>
+											<div
+												className={`handleBarFocusable__${handleBarID}`}
+												onFocus={actions.focusActiveElementHandleBar}
+												onBlur={actions.blurActiveElementHandleBar}
+												data-focus={state.activeElement.focusState.handleBar}
+												tabIndex={0}
+											>
+												<div className={`handleBar__${handleBarID}`} />
+											</div>
 										</div>
-									</div>
-								</>
-							)}
+									</>
+								)}
 
-							{/**/}
+								{/**/}
+							</div>
 						</div>
-					</div>
-				</>
-			)}
-
+					</>
+				)}
+			</div>
 			<Debug debug={state} />
-		</div>
+
+			{/**/}
+		</>
 	)
 }

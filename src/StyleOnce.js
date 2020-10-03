@@ -1,27 +1,25 @@
 import detab from "detab"
 import { useLayoutEffect } from "react"
 
-// <CSS> manually renders a <style> element once.
+// <StyleOnce> manually renders a <style> element once.
 //
 // Ex:
 //
-// function Component() {
-//   const id = React.useMemo(() => {
-//     return uuidv4()
-//   }, [])
+// const id = uuidv4()
 //
+// function Component() {
 //   return (
-//     <CSS id={id}>
+//     <StyleOnce id={id}>
 //       {css`
 //         ...
 //       `}
-//     </CSS>
+//     </StyleOnce>
 //   )
 // }
 //
-export default function CSS({ id, children: css }) {
+export default function StyleOnce({ id, children: css }) {
 	if (typeof id !== "string" || id === "") {
-		const errorMessage = "<CSS>: Did you forget an ID prop? Try <CSS id={<string>}>."
+		const errorMessage = "<StyleOnce>: Did you forget an ID prop? Try <StyleOnce id={<string>}>."
 		throw new Error(errorMessage)
 	}
 
