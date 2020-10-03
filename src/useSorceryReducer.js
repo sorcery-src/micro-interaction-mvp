@@ -34,7 +34,7 @@ const methods = state => ({
 	handlePointerDown() {
 		state.pointer.active = true
 
-		const height = state.pointer.y - handleBarOffset // - offset
+		const height = state.pointer.y - handleBarOffset
 		if (!state.activeElement) {
 			state.activeElement = {
 				id: uuidv4().slice(0, 6),
@@ -56,7 +56,7 @@ const methods = state => ({
 		// 	offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
 		// }
 
-		// const height = state.pointer.y - handleBarOffset // - offset
+		// const height = state.pointer.y - handleBarOffset
 		// state.activeElement = {
 		// 	id: uuidv4().slice(0, 6),
 		// 	focused: true,
@@ -75,7 +75,7 @@ const methods = state => ({
 
 		// TODO: Check state.activeElement.focusState.element?
 		if (state.pointer.active && state.activeElement.focusState.handleBar) {
-			const height = Math.max(0, state.pointer.y - handleBarOffset /* - offset */)
+			const height = Math.max(0, state.pointer.y - handleBarOffset)
 
 			const fn = !state.keys.shift ? n => n : quantize
 			state.activeElement.style.height = fn(height)
@@ -88,7 +88,7 @@ const methods = state => ({
 		// 	// if (state.elements.length > 1) {
 		// 	// 	offset = state.elements.slice(0, -1).reduce((acc, each) => acc + each.style.height, 0)
 		// 	// }
-		// 	const height = Math.max(0, state.pointer.y - handleBarOffset /* - offset */)
+		// 	const height = Math.max(0, state.pointer.y - handleBarOffset)
 		// 	state.activeElement.style.height = height
 		// 	// }
 		// }

@@ -199,7 +199,7 @@ export default function App() {
 												background-color: hsl(${3.25 * 60}, 100%, 90%);
 											}
 											.handleBarFocusable__${handleBarID}[data-focus="true"] .handleBar__${handleBarID} {
-												background-color: hsl(${3.25 * 60}, 100%, 80%);
+												background-color: hsl(${3.25 * 60}, 100%, 75%);
 											}
 										`}
 									</CSS>
