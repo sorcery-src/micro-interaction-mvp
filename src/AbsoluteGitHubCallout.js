@@ -13,7 +13,7 @@ export default function AbsoluteGitHubCallout() {
 
 			<StyleOnce id={id}>
 				{css`
-					.absoluteContext__${id} {
+					.absolute__${id} {
 						position: absolute;
 						top: 0;
 						right: 0;
@@ -24,7 +24,7 @@ export default function AbsoluteGitHubCallout() {
 				`}
 			</StyleOnce>
 
-			<div className={`absoluteContext__${id}`}>
+			<div className={`absolute__${id}`}>
 				<SVGGitHubCallout className={`GitHubCallout__${id}`} />
 			</div>
 

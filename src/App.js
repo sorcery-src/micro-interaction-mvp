@@ -20,7 +20,7 @@ function Debug({ debug }) {
 
 			<StyleOnce id={debugID}>
 				{css`
-					.debugAbsoluteContext__${debugID} {
+					.absolute__${debugID} {
 						padding-top: ${px(12)};
 						padding-right: ${px(12)};
 						padding-bottom: ${px(12)};
@@ -37,7 +37,7 @@ function Debug({ debug }) {
 				`}
 			</StyleOnce>
 
-			<div className={`debugAbsoluteContext__${debugID}`}>
+			<div className={`absolute__${debugID}`}>
 				<div className={`debug__${debugID}`}>{JSON.stringify(debug, null, 2)}</div>
 			</div>
 		</>
@@ -150,7 +150,7 @@ export default function App() {
 
 								<StyleOnce id={handleBarDebugID}>
 									{css`
-										.debugAbsoluteContext__${handleBarDebugID} {
+										.absolute__${handleBarDebugID} {
 											padding-top: ${px(8)};
 											padding-right: ${px(8)};
 											padding-bottom: ${px(8)};
@@ -168,7 +168,7 @@ export default function App() {
 									`}
 								</StyleOnce>
 
-								<div className={`debugAbsoluteContext__${handleBarDebugID}`}>
+								<div className={`absolute__${handleBarDebugID}`}>
 									<div className={`debug__${handleBarDebugID}`}>{state.activeElement.style.height}px</div>
 								</div>
 
@@ -176,7 +176,7 @@ export default function App() {
 									<>
 										<StyleOnce id={handleBarID}>
 											{css`
-												.handleBarAbsoluteContext__${handleBarID} {
+												.absolute__${handleBarID} {
 													position: absolute;
 													top: 100%;
 													right: 0;
@@ -206,7 +206,7 @@ export default function App() {
 											`}
 										</StyleOnce>
 
-										<div className={`handleBarAbsoluteContext__${handleBarID}`}>
+										<div className={`absolute__${handleBarID}`}>
 											<div
 												className={`handleBarFocusable__${handleBarID}`}
 												onFocus={actions.focusActiveElementHandleBar}
