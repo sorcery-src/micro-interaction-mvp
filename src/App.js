@@ -250,8 +250,7 @@ export default function App() {
 						</div>
 
 						{/* snapToEdge */}
-						{/* {state.pointer.y / window.innerHeight >= 0.75 && ( */}
-						{window.innerHeight - state.pointer.y < 64 && (
+						{state.activeElement.snapToEdgeState.bottom && (
 							<>
 								{/**/}
 

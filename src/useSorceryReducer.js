@@ -38,15 +38,21 @@ const methods = state => ({
 		if (!state.activeElement) {
 			state.activeElement = {
 				id: uuidv4().slice(0, 6),
-				focusState: {
-					element: true,
-					handleBar: true,
-				},
 				style: {
 					display: "block",
 					width: "100%",
 					maxWidth: "100%",
 					height,
+				},
+				focusState: {
+					element: true,
+					handleBar: true,
+				},
+				snapToEdgeState: {
+					// top: false,
+					// right: false,
+					bottom: false,
+					// left: false,
 				},
 			}
 		}
@@ -79,6 +85,10 @@ const methods = state => ({
 
 			const fn = !state.keys.shift ? n => n : quantize
 			state.activeElement.style.height = fn(height)
+		}
+
+		if (state.pointer.down && state.activeElement.focusState.handleBar) {
+			state.activeElement.snapToEdgeState.bottom = state.window.height - state.activeElement.style.height < 64
 		}
 
 		// if (state.pointer.down) {
@@ -124,9 +134,9 @@ const methods = state => ({
 })
 
 const initialState = {
-	// window: {
-	// 	height: window.innerHeight, // TODO
-	// },
+	window: {
+		height: window.innerHeight, // TODO
+	},
 	pointer: {
 		down: false,
 		x: 0,
