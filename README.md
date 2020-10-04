@@ -34,7 +34,7 @@ _Explores UX concepts for creating, resizing, and deleting block elements._
 
 _Explores configurable properties for block elements._
 
-- [ ] Can we resize an element? (top _and_ bottom)
+- [ ] Can we resize an element? (top and bottom)
 - [ ] Can we add margin to an element?
 - [ ] Can we add margin to an element?
 - [ ] Can we add negative margin to an element?
