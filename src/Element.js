@@ -7,9 +7,9 @@ import createID from "utils/createID"
 import css from "lib/x/tpl"
 import px from "lib/CSS/px"
 
-const debugElementID = createID()
-
 function DebugElement({ element }) {
+	const [debugElementID] = React.useState(() => createID())
+
 	return (
 		<>
 			{/**/}
@@ -22,9 +22,9 @@ function DebugElement({ element }) {
 						padding-bottom: ${px(8)};
 						padding-left: ${px(8)};
 						position: absolute;
-						top: ${element.style.height < 32 ? "100%" : "auto"};
 						right: 0;
-						bottom: ${element.style.height < 32 ? "auto" : "0"};
+						bottom: 0;
+						display: ${element.style.height < 32 ? "none" : "block"};
 						user-select: none;
 					}
 					.debugElement__${debugElementID} {
@@ -45,10 +45,10 @@ function DebugElement({ element }) {
 	)
 }
 
-const elementID = createID()
-const resizeElementID = createID()
-
 export default function Element({ element, dispatch }) {
+	const [elementID] = React.useState(() => createID())
+	const [resizeElementID] = React.useState(() => createID())
+
 	return (
 		<>
 			{/**/}
@@ -57,6 +57,7 @@ export default function Element({ element, dispatch }) {
 				{css`
 					[data-element="${elementID}"] {
 						background-color: hsl(${3.25 * 60}, 100%, 95%);
+						box-shadow: inset 0 0 0 0.5px hsl(${3.25 * 60}, 100%, 75%), 0 0 0 0.5px hsl(${3.25 * 60}, 100%, 75%);
 					}
 					[data-element="${elementID}"]:focus {
 						outline: none;
