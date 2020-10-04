@@ -1,0 +1,21 @@
+.absolute {
+	/* prettier-ignore */
+	padding:
+		calc(12 / 16 * 1rem)
+		calc(12 / 16 * 1rem)
+		calc(12 / 16 * 1rem)
+		calc(12 / 16 * 1rem);
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: calc(320 / 1rem);
+}
+.text {
+	white-space: pre;
+	tab-size: 2;
+	/* prettier-ignore */
+	font:
+		calc(14 / 16 * 1rem) /
+		1.25
+		monospace;
+}
