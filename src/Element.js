@@ -115,8 +115,8 @@ export default function Element({ element, dispatch }) {
 									.resizer__${resizeElementID} {
 										width: ${px(72)};
 										height: ${px(6)};
-										border-radius: 9999px;
 										background-color: hsl(${3.25 * 60}, 100%, 90%);
+										border-radius: 9999px;
 									}
 									.resizerTabIndex__${resizeElementID}[data-has-focus="true"] .resizer__${resizeElementID} {
 										background-color: hsl(${3.25 * 60}, 100%, 75%);
