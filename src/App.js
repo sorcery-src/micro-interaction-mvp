@@ -79,7 +79,7 @@ export default function App() {
 				))}
 			</div>
 
-			{state.showSnapToEdge && <SnapToEdgeHighlight />}
+			{state.showSnapToEdgeHighlight && <SnapToEdgeHighlight />}
 
 			<DebugState state={state} />
 		</>

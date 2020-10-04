@@ -12,7 +12,8 @@ function Resizer({ element, dispatch }) {
 				onFocus={() => dispatch.focusActiveElementResizeByKey({ direction: "bottom", key: element.key })}
 				onBlur={() => dispatch.blurActiveElementResizeByKey({ key: element.key })}
 				tabIndex={0}
-				data-has-focus={element.focusState.resizeBottom}
+				// TODO
+				data-has-focus={element.resize.bottom}
 			>
 				<div className={resizer.resizer} />
 			</div>
