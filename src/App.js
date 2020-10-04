@@ -53,9 +53,41 @@ import useSorceryReducer from "useSorceryReducer2"
 // 	[dep],
 // )
 
-const activeElementID = createID()
-const handleBarID = createID()
-const snapToEdgeID = createID()
+const elementID = createID()
+
+function Element({ element }) {
+	return (
+		<>
+			{/**/}
+
+			<StyleOnce id={elementID}>
+				{css`
+					[data-element="${elementID}"] {
+						background-color: hsl(${3.25 * 60}, 100%, 90%);
+					}
+				`}
+			</StyleOnce>
+
+			{/* TODO: element.tag */}
+			<div id={element.id} className={element.className} style={element.style} data-element={elementID}>
+				<div style={{ position: "relative", height: "100%" }}>
+					{/**/}
+
+					{/* ... */}
+
+					{/**/}
+				</div>
+			</div>
+
+			{/**/}
+		</>
+	)
+}
+
+// -------------------------
+
+// const handleBarID = createID()
+// const snapToEdgeID = createID()
 
 export default function App() {
 	const [state, dispatch] = useSorceryReducer()
@@ -133,7 +165,9 @@ export default function App() {
 
 			<AbsoluteGitHubCallout />
 
-			<>Hello, world!</>
+			{state.elements.map(each => (
+				<Element key={each.reactKey} element={each} />
+			))}
 
 			<DebugState state={state} />
 

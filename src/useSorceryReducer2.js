@@ -1,27 +1,60 @@
-import quantize from "utils/quantize"
+import createID from "utils/createID"
 import useMethods from "use-methods"
-import { v4 as uuidv4 } from "uuid"
+
+// hints: {
+// 	top: false,
+// 	right: false,
+// 	bottom: false,
+// 	left: false,
+// },
 
 const methods = state => ({
-	// state.window
 	resize({ width, height }) {
 		state.window.width = width
 		state.window.height = height
 	},
 
-	// state.pointer
-	pointerMove({ x: rawX, y: rawY }) {
-		state.pointer.x = Math.round(rawX)
-		state.pointer.y = Math.round(rawY)
+	pointerMove({ x, y }) {
+		state.pointer.x = Math.round(x)
+		state.pointer.y = Math.round(y)
+
+		if (state.pointer.down) {
+			const element = state.elements.find(each => (each.reactKey = state.activeElementReactKey))
+			if (element) {
+				element.style.height = state.pointer.y
+			}
+		}
 	},
 	pointerDown() {
 		state.pointer.down = true
+
+		if (!state.elements.length) {
+			const reactKey = createID()
+			state.activeElementReactKey = reactKey
+			state.elements.push({
+				tag: "div",
+				reactKey,
+				id: null,
+				className: null,
+				style: {
+					display: "block",
+					width: "100%",
+					height: state.pointer.y,
+				},
+				// focus: {
+				// 	element: true,
+				// 	top: false,
+				// 	right: false,
+				// 	bottom: true,
+				// 	left: false,
+				// },
+			})
+		}
 	},
 	pointerUp() {
 		state.pointer.down = false
 	},
 
-	// state.keyboard (1 of 2)
 	keyDownShiftKey() {
 		state.keyboard.shiftKey = true
 	},
@@ -35,7 +68,6 @@ const methods = state => ({
 		state.keyboard.metaKey = true
 	},
 
-	// state.keyboard (2 of 2)
 	keyUpShiftKey() {
 		state.keyboard.shiftKey = false
 	},
@@ -48,8 +80,6 @@ const methods = state => ({
 	keyUpMetaKey() {
 		state.keyboard.metaKey = false
 	},
-
-	// ...
 })
 
 const initialState = {
@@ -68,8 +98,8 @@ const initialState = {
 		altKey: false,
 		metaKey: false,
 	},
-	// activeElement: null,
-	// // elements: [],
+	activeElementReactKey: "",
+	elements: [],
 }
 
 export default function useSorceryReducer() {
