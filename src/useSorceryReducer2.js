@@ -21,12 +21,18 @@ const methods = state => ({
 		state.pointer.x = Math.round(x)
 		state.pointer.y = Math.round(y)
 
+		// let offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
+		// 	offset += activeElement.style.height
+
 		const transform = !state.keyboard.shiftKey ? n => n : quantize
 		if (state.pointer.down && state.activeElementKey) {
 			const activeElement = state.elements.find(each => each.key === state.activeElementKey)
 			// TODO: Too many guards.
 			if (activeElement && activeElement.hasFocus && activeElement.focusState.resizeBottom) {
-				activeElement.style.height = transform(state.pointer.y - resizeOffset)
+				const offset = state.elements
+					.filter(each => each.key !== state.activeElementKey)
+					.reduce((acc, each) => acc + each.style.height, 0)
+				activeElement.style.height = transform(state.pointer.y - offset - resizeOffset)
 			}
 		}
 
@@ -40,18 +46,18 @@ const methods = state => ({
 	pointerDown() {
 		state.pointer.down = true
 
-		if (!state.elements.length) {
-			const key = createID()
-			state.activeElementKey = key
+		if (!state.activeElementKey) {
+			state.activeElementKey = createID()
+			const offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
 			state.elements.push({
 				tag: "div",
-				key,
+				key: state.activeElementKey,
 				id: null,
 				className: null,
 				style: {
 					display: "block",
 					width: "100%",
-					height: state.pointer.y - resizeOffset,
+					height: state.pointer.y - offset - resizeOffset,
 				},
 				hasFocus: true,
 				focusState: {
