@@ -1,8 +1,8 @@
-import createID from "createID"
-import css from "tpl"
 import React from "react"
-import StyleOnce from "StyleOnce"
 import SVGGitHubCallout from "SVGGitHubCallout"
+import StyleOnce from "lib/CSS/StyleOnce"
+import createID from "utils/createID"
+import css from "lib/x/tpl"
 
 const id = createID()
 

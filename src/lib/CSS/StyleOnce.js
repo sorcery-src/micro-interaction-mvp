@@ -1,7 +1,7 @@
-import detab from "detab"
+import detab from "./detab"
 import { useLayoutEffect } from "react"
 
-// <StyleOnce> manually renders a <style> element once.
+// <StyleOnce> renders a <style> element once.
 //
 // Ex:
 //
