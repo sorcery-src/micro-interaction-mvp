@@ -18,22 +18,29 @@ const methods = state => ({
 		state.pointer.x = Math.round(x)
 		state.pointer.y = Math.round(y)
 
-		if (state.pointer.down) {
-			const element = state.elements.find(each => (each.reactKey = state.activeElementReactKey))
-			if (element) {
-				element.style.height = state.pointer.y
+		if (state.pointer.down && state.activeElementKey) {
+			const activeElement = state.elements.find(each => each.key === state.activeElementKey)
+			if (activeElement) {
+				activeElement.style.height = state.pointer.y
 			}
 		}
+
+		// if (state.pointer.down) {
+		// 	const element = state.elements.find(each => (each.key = state.activeElementKey))
+		// 	if (element) {
+		// 		element.style.height = state.pointer.y
+		// 	}
+		// }
 	},
 	pointerDown() {
 		state.pointer.down = true
 
 		if (!state.elements.length) {
-			const reactKey = createID()
-			state.activeElementReactKey = reactKey
+			const key = createID()
+			state.activeElementKey = key
 			state.elements.push({
 				tag: "div",
-				reactKey,
+				key,
 				id: null,
 				className: null,
 				style: {
@@ -41,13 +48,13 @@ const methods = state => ({
 					width: "100%",
 					height: state.pointer.y,
 				},
-				// focus: {
-				// 	element: true,
-				// 	top: false,
-				// 	right: false,
-				// 	bottom: true,
-				// 	left: false,
-				// },
+				focusState: {
+					element: true,
+					resizeTop: false,
+					resizeRight: false,
+					resizeBottom: true,
+					resizeLeft: false,
+				},
 			})
 		}
 	},
@@ -80,6 +87,18 @@ const methods = state => ({
 	keyUpMetaKey() {
 		state.keyboard.metaKey = false
 	},
+
+	focusActiveElementByKey(key) {
+		state.activeElementKey = key
+
+		const activeElement = state.elements.find(each => each.key === state.activeElementKey)
+		if (activeElement) {
+			activeElement.focusState.element = true
+		}
+	},
+	blurActiveElement() {
+		state.activeElementKey = ""
+	},
 })
 
 const initialState = {
@@ -98,7 +117,7 @@ const initialState = {
 		altKey: false,
 		metaKey: false,
 	},
-	activeElementReactKey: "",
+	activeElementKey: "",
 	elements: [],
 }
 

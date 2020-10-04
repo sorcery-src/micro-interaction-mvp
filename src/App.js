@@ -55,7 +55,7 @@ import useSorceryReducer from "useSorceryReducer2"
 
 const elementID = createID()
 
-function Element({ element }) {
+function Element({ element, dispatch }) {
 	return (
 		<>
 			{/**/}
@@ -69,7 +69,16 @@ function Element({ element }) {
 			</StyleOnce>
 
 			{/* TODO: element.tag */}
-			<div id={element.id} className={element.className} style={element.style} data-element={elementID}>
+			<div
+				id={element.key} // TODO?
+				style={element.style}
+				onFocus={() => dispatch.focusActiveElementByKey(element.key)}
+				onBlur={dispatch.blurActiveElement}
+				onFocus={() => console.log("a")}
+				onBlur={() => console.log("b")}
+				data-element={elementID}
+				tabIndex={0}
+			>
 				<div style={{ position: "relative", height: "100%" }}>
 					{/**/}
 
@@ -159,6 +168,13 @@ export default function App() {
 		}
 	}, [dispatch])
 
+	React.useEffect(() => {
+		if (state.activeElementKey) {
+			const element = document.getElementById(state.activeElementKey)
+			element.focus()
+		}
+	}, [state.activeElementKey])
+
 	return (
 		<>
 			{/**/}
@@ -166,7 +182,7 @@ export default function App() {
 			<AbsoluteGitHubCallout />
 
 			{state.elements.map(each => (
-				<Element key={each.reactKey} element={each} />
+				<Element key={each.key} element={each} dispatch={dispatch} />
 			))}
 
 			<DebugState state={state} />
