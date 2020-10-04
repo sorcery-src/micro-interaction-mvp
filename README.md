@@ -34,9 +34,13 @@ _Explores UX concepts for creating, resizing, and deleting block elements._
 
 _Explores persisting state and support for export formats._
 
+<!--
 - [ ] Can we add a history stack?
 - [ ] Can we undo and redo operations? (e.g. `ctrl-z`, `shift-ctrl-z`)
 - [ ] Can we persist the session to localStorage?
+-->
+
+- [ ] Can we refactor to CSS Modules?
 - [ ] Can we export HTML as HTML?
 - [ ] Can we export HTML as React.js?
 - [ ] Can we export HTML as Vue.js?
