@@ -45,6 +45,12 @@ const methods = state => ({
 	pointerDown() {
 		state.pointer.down = true
 
+		const sum = state.elements.reduce((acc, each) => acc + each.style.height, 0)
+		if (state.pointer.y <= sum) {
+			// No-op
+			return
+		}
+
 		if (!state.activeElementKey) {
 			state.activeElementKey = createID()
 			const offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
