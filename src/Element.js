@@ -56,7 +56,7 @@ export default function Element({ element, dispatch }) {
 			<StyleOnce id={elementID}>
 				{css`
 					[data-element="${elementID}"] {
-						background-color: hsl(${3.25 * 60}, 100%, 90%);
+						background-color: hsl(${3.25 * 60}, 100%, 95%);
 					}
 					[data-element="${elementID}"]:focus {
 						outline: none;
@@ -72,7 +72,6 @@ export default function Element({ element, dispatch }) {
 				id={element.key} // TODO?
 				style={element.style}
 				onFocus={() => dispatch.focusActiveElementByKey(element.key)}
-				// onBlur={() => dispatch.blurActiveElementByKey(element.key)} // TODO
 				onBlur={e => {
 					if (!e.target.contains(e.relatedTarget)) {
 						dispatch.blurActiveElementByKey(element.key)
@@ -97,6 +96,7 @@ export default function Element({ element, dispatch }) {
 										display: flex;
 										justify-content: center;
 										align-items: center;
+										z-index: 50;
 									}
 									.resizerTabIndex__${resizeElementID} {
 										padding-top: ${px(6)};

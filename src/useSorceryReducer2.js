@@ -26,12 +26,11 @@ const methods = state => ({
 
 		const transform = !state.keyboard.shiftKey ? n => n : quantize
 		if (state.pointer.down && state.activeElementKey) {
-			const activeElement = state.elements.find(each => each.key === state.activeElementKey)
-			// TODO: Too many guards.
+			const x = state.elements.findIndex(each => each.key === state.activeElementKey)
+			const activeElement = state.elements[x]
+			// TODO: Too many guards?
 			if (activeElement && activeElement.hasFocus && activeElement.focusState.resizeBottom) {
-				const offset = state.elements
-					.filter(each => each.key !== state.activeElementKey)
-					.reduce((acc, each) => acc + each.style.height, 0)
+				const offset = state.elements.slice(0, x).reduce((acc, each) => acc + each.style.height, 0)
 				activeElement.style.height = transform(state.pointer.y - offset - resizeOffset)
 			}
 		}
