@@ -22,9 +22,8 @@ const methods = state => ({
 		const transform = !state.keyboard.shiftKey ? n => n : quantize
 		if (state.pointer.down && state.activeElementKey) {
 			const activeElement = state.elements.find(each => each.key === state.activeElementKey)
-			// TODO: Deprecate activeElement.hasFocus?
+			// TODO: Too many guards.
 			if (activeElement && activeElement.hasFocus && activeElement.focusState.resizeBottom) {
-				// TODO
 				activeElement.style.height = transform(state.pointer.y)
 			}
 		}
