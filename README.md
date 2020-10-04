@@ -40,13 +40,13 @@ _Explores persisting state and support for export formats._
 - [ ] Can we persist the session to localStorage?
 -->
 
-- [ ] Can we refactor to CSS Modules?
-- [ ] Can we export HTML as HTML?
-- [ ] Can we export HTML as React.js?
-- [ ] Can we export HTML as Vue.js?
-- [ ] Can we export CSS as CSS?
-- [ ] Can we export CSS as Styled Components? (e.g. CSS-in-JS)
-- [ ] Can we export CSS as Tailwind CSS? (e.g. utility-first)
+- [x] Can we refactor to CSS Modules?
+- [ ] Can we export HTML construction as plain HTML?
+- [ ] Can we export HTML construction as React.js?
+- [ ] Can we export HTML construction as Vue.js?
+- [ ] Can we export CSS construction as plain CSS?
+- [ ] Can we export CSS construction as Styled Components? (e.g. CSS-in-JS)
+- [ ] Can we export CSS construction as Tailwind CSS? (e.g. utility-first)
 
 ### v0.3
 
