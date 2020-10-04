@@ -69,11 +69,11 @@ export default function App() {
 				dispatch.keyUpMetaKey()
 			}
 		}
-		window.addEventListener("keydown", keyDownHandler)
-		window.addEventListener("keyup", keyUpHandler)
+		window.addEventListener("keydown", keyDownHandler, false)
+		window.addEventListener("keyup", keyUpHandler, false)
 		return () => {
-			window.removeEventListener("keydown", keyDownHandler)
-			window.removeEventListener("keyup", keyUpHandler)
+			window.removeEventListener("keydown", keyDownHandler, false)
+			window.removeEventListener("keyup", keyUpHandler, false)
 		}
 	}, [dispatch])
 

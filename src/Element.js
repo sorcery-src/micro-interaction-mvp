@@ -58,6 +58,10 @@ export default function Element({ element, dispatch }) {
 					[data-element="${elementID}"] {
 						background-color: hsl(${3.25 * 60}, 100%, 95%);
 						box-shadow: inset 0 0 0 0.5px hsl(${3.25 * 60}, 100%, 75%), 0 0 0 0.5px hsl(${3.25 * 60}, 100%, 75%);
+
+						transition-property: background-color, box-shadow;
+						transition-duration: 100ms;
+						transition-timing-function: ease-out;
 					}
 					[data-element="${elementID}"]:focus {
 						outline: none;
@@ -116,6 +120,10 @@ export default function Element({ element, dispatch }) {
 									}
 									.resizerTabIndex__${resizeElementID}[data-has-focus="true"] .resizer__${resizeElementID} {
 										background-color: hsl(${3.25 * 60}, 100%, 75%);
+
+										transition-property: background-color;
+										transition-duration: 100ms;
+										transition-timing-function: ease-out;
 									}
 								`}
 							</StyleOnce>
