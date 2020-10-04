@@ -13,6 +13,9 @@ const ELEMENT_MIN_HEIGHT = 6
 const RESIZE_OFFSET = 6 + 6 / 2
 
 const methods = state => ({
+	/*
+	 * Pointer
+	 */
 	pointerMove({ x, y }) {
 		state.pointer.x = Math.round(x)
 		state.pointer.y = Math.round(y)
@@ -74,6 +77,20 @@ const methods = state => ({
 		state.pointer.down = false
 	},
 
+	/*
+	 * Key down
+	 */
+	keyDownBackspace() {
+		// NOTE: No such state.keyboard.backspace.
+		if (state.activeElementKey) {
+			const x = state.elements.findIndex(each => each.key === state.activeElementKey)
+			if (x >= 0) {
+				state.elements.splice(x, 1)
+				state.activeElementKey = null
+			}
+		}
+	},
+
 	keyDownShiftKey() {
 		state.keyboard.shiftKey = true
 	},
@@ -87,6 +104,9 @@ const methods = state => ({
 		state.keyboard.metaKey = true
 	},
 
+	/*
+	 * Key up
+	 */
 	keyUpShiftKey() {
 		state.keyboard.shiftKey = false
 	},
@@ -100,6 +120,9 @@ const methods = state => ({
 		state.keyboard.metaKey = false
 	},
 
+	/*
+	 * Focus
+	 */
 	focusActiveElementByKey(key) {
 		state.activeElementKey = key
 		const activeElement = state.elements.find(each => each.key === state.activeElementKey)
