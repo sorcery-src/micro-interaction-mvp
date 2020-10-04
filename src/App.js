@@ -3,6 +3,7 @@
 import * as React from "react"
 
 import AbsoluteGitHubCallout from "AbsoluteGitHubCallout"
+import DebugElement from "DebugElement"
 import DebugState from "DebugState"
 import StyleOnce from "lib/CSS/StyleOnce"
 import createID from "utils/createID"
@@ -65,6 +66,10 @@ function Element({ element, dispatch }) {
 					[data-element="${elementID}"] {
 						background-color: hsl(${3.25 * 60}, 100%, 90%);
 					}
+					[data-element="${elementID}"]:focus {
+						outline: none;
+						background-color: hsl(${3.25 * 60}, 100%, 75%);
+					}
 				`}
 			</StyleOnce>
 
@@ -82,7 +87,7 @@ function Element({ element, dispatch }) {
 				<div style={{ position: "relative", height: "100%" }}>
 					{/**/}
 
-					{/* ... */}
+					<DebugElement element={element} />
 
 					{/**/}
 				</div>
@@ -168,6 +173,7 @@ export default function App() {
 		}
 	}, [dispatch])
 
+	// Focuses state.activeElementKey.
 	React.useEffect(() => {
 		if (state.activeElementKey) {
 			const element = document.getElementById(state.activeElementKey)
