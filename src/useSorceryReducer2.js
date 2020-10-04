@@ -20,7 +20,9 @@ const methods = state => ({
 
 		if (state.pointer.down && state.activeElementKey) {
 			const activeElement = state.elements.find(each => each.key === state.activeElementKey)
-			if (activeElement) {
+			// TODO: Deprecate activeElement.hasFocus?
+			if (activeElement && activeElement.hasFocus && activeElement.focusState.resizeBottom) {
+				// TODO
 				activeElement.style.height = state.pointer.y
 			}
 		}
@@ -49,14 +51,12 @@ const methods = state => ({
 					height: state.pointer.y,
 				},
 				hasFocus: true,
-
-				// focusState: {
-				// 	element: true,
-				// 	resizeTop: false,
-				// 	resizeRight: false,
-				// 	resizeBottom: true,
-				// 	resizeLeft: false,
-				// },
+				focusState: {
+					resizeTop: false,
+					resizeRight: false,
+					resizeBottom: true, // TODO
+					resizeLeft: false,
+				},
 			})
 		}
 	},
@@ -92,7 +92,6 @@ const methods = state => ({
 
 	focusActiveElementByKey(key) {
 		state.activeElementKey = key
-
 		const activeElement = state.elements.find(each => each.key === state.activeElementKey)
 		if (activeElement) {
 			activeElement.hasFocus = true
@@ -102,13 +101,30 @@ const methods = state => ({
 		const activeElement = state.elements.find(each => each.key === key)
 		if (activeElement) {
 			activeElement.hasFocus = false
-			// for (const k in activeElement.focusState) {
-			// 	activeElement.focusState[k] = false
-			// }
+			for (const k in activeElement.focusState) {
+				activeElement.focusState[k] = false
+			}
 		}
-
 		// (Reverse order)
 		state.activeElementKey = ""
+	},
+
+	focusActiveElementResizeByKey({ direction, key }) {
+		const activeElement = state.elements.find(each => each.key === key)
+		if (activeElement) {
+			// activeElement.hasFocus = false
+			const titleCase = direction[0].toUpperCase() + direction.slice(1)
+			activeElement.focusState["resize" + titleCase] = true
+		}
+	},
+	blurActiveElementResizeByKey({ key }) {
+		const activeElement = state.elements.find(each => each.key === key)
+		if (activeElement) {
+			activeElement.hasFocus = false
+			for (const k in activeElement.focusState) {
+				activeElement.focusState[k] = false
+			}
+		}
 	},
 })
 

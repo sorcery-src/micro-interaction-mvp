@@ -79,7 +79,12 @@ function Element({ element, dispatch }) {
 				id={element.key} // TODO?
 				style={element.style}
 				onFocus={() => dispatch.focusActiveElementByKey(element.key)}
-				onBlur={() => dispatch.blurActiveElementByKey(element.key)}
+				// onBlur={() => dispatch.blurActiveElementByKey(element.key)} // TODO
+				onBlur={e => {
+					if (!e.target.contains(e.relatedTarget)) {
+						dispatch.blurActiveElementByKey(element.key)
+					}
+				}}
 				data-element={elementID}
 				tabIndex={0}
 			>
@@ -115,6 +120,7 @@ function Element({ element, dispatch }) {
 										border-radius: 9999px;
 										background-color: hsl(${3.25 * 60}, 100%, 90%);
 									}
+									/* TODO */
 									.resizerTabIndex__${resizeElementID}[data-focus="true"] .resizer__${resizeElementID} {
 										background-color: hsl(${3.25 * 60}, 100%, 75%);
 									}
@@ -124,9 +130,8 @@ function Element({ element, dispatch }) {
 							<div className={`absolute__${resizeElementID}`}>
 								<div
 									className={`resizerTabIndex__${resizeElementID}`}
-									// onFocus={dispatch.focusActiveElementresizer}
-									// onBlur={dispatch.blurActiveElementresizer}
-									// data-focus={state.activeElement.focusState.resizer}
+									onFocus={() => dispatch.focusActiveElementResizeByKey({ direction: "bottom", key: element.key })}
+									onBlur={() => dispatch.blurActiveElementResizeByKey({ key: element.key })}
 									tabIndex={0}
 								>
 									<div className={`resizer__${resizeElementID}`} />
