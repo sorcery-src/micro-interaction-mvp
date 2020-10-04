@@ -32,6 +32,17 @@ _Explores UX concepts for creating, resizing, and deleting block elements._
 
 ### v0.2
 
+_Explores configurable properties for block elements._
+
+- [ ] Can we add margin to an element?
+- [ ] Can we add negative margin to an element?
+- [ ] Can we control the margin between two elements naturally?
+- [ ] Can we add padding to an element?
+- [ ] Can we add a right-hand sidebar to make properties inspectable?
+- [ ] Can elements and the sidebar provide two-way binding for an element’s properties?
+
+### v0.3
+
 _Explores persisting state and support for export formats._
 
 <!--
@@ -47,17 +58,6 @@ _Explores persisting state and support for export formats._
 - [ ] Can we export CSS construction as plain CSS?
 - [ ] Can we export CSS construction as Styled Components? (e.g. CSS-in-JS)
 - [ ] Can we export CSS construction as Tailwind CSS? (e.g. utility-first)
-
-### v0.3
-
-_Explores configurable properties for block elements._
-
-- [ ] Can we add margin to an element?
-- [ ] Can we add negative margin to an element?
-- [ ] Can we control the margin between two elements naturally?
-- [ ] Can we add padding to an element?
-- [ ] Can we add a right-hand sidebar to make properties inspectable?
-- [ ] Can elements and the sidebar provide two-way binding for an element’s properties?
 
 ---
 
