@@ -31,7 +31,7 @@ const methods = state => ({
 			// TODO: Too many guards?
 			if (activeElement && activeElement.hasFocus && activeElement.focusState.resizeBottom) {
 				const offset = state.elements.slice(0, x).reduce((acc, each) => acc + each.style.height, 0)
-				activeElement.style.height = transform(state.pointer.y - offset - resizeOffset)
+				activeElement.style.height = Math.max(0, transform(state.pointer.y - offset - resizeOffset))
 			}
 		}
 
@@ -56,7 +56,7 @@ const methods = state => ({
 				style: {
 					display: "block",
 					width: "100%",
-					height: state.pointer.y - offset - resizeOffset,
+					height: Math.max(0, state.pointer.y - offset - resizeOffset),
 				},
 				hasFocus: true,
 				focusState: {
