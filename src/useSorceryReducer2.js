@@ -2,45 +2,36 @@ import createID from "utils/createID"
 import quantize from "utils/quantize"
 import useMethods from "use-methods"
 
-// hints: {
-// 	top: false,
-// 	right: false,
-// 	bottom: false,
-// 	left: false,
-// },
-
-const resizeOffset = 6 + 6 / 2
+const ELEMENT_MIN_HEIGHT = 6
+const RESIZE_OFFSET = 6 + 6 / 2
+const SNAP_TO_EDGE_SIZE = 64
 
 const methods = state => ({
-	// resize({ width, height }) {
-	// 	state.window.width = width
-	// 	state.window.height = height
-	// },
+	/*
+	 * Layout
+	 */
+	updateLayout({ width, height }) {
+		state.layout.width = width
+		state.layout.height = height
+	},
 
+	/*
+	 * Pointer
+	 */
 	pointerMove({ x, y }) {
 		state.pointer.x = Math.round(x)
 		state.pointer.y = Math.round(y)
-
-		// let offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
-		// 	offset += activeElement.style.height
 
 		const transform = !state.keyboard.shiftKey ? n => n : quantize
 		if (state.pointer.down && state.activeElementKey) {
 			const x = state.elements.findIndex(each => each.key === state.activeElementKey)
 			const activeElement = state.elements[x]
-			// TODO: Too many guards?
-			if (activeElement && activeElement.hasFocus && activeElement.focusState.resizeBottom) {
+			if (activeElement && activeElement.focusState.resizeBottom) {
 				const offset = state.elements.slice(0, x).reduce((acc, each) => acc + each.style.height, 0)
-				activeElement.style.height = Math.max(6, transform(state.pointer.y - offset - resizeOffset))
+				activeElement.style.height = Math.max(ELEMENT_MIN_HEIGHT, transform(state.pointer.y - offset - RESIZE_OFFSET))
+				state.showSnapToEdge = state.layout.height - (activeElement.style.height + offset) < SNAP_TO_EDGE_SIZE
 			}
 		}
-
-		// if (state.pointer.down) {
-		// 	const element = state.elements.find(each => (each.key = state.activeElementKey))
-		// 	if (element) {
-		// 		element.style.height = state.pointer.y
-		// 	}
-		// }
 	},
 	pointerDown() {
 		state.pointer.down = true
@@ -52,9 +43,9 @@ const methods = state => ({
 		}
 
 		if (!state.activeElementKey) {
-			state.activeElementKey = createID()
 			const offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
-			state.elements.push({
+			state.activeElementKey = createID()
+			const activeElement = {
 				tag: "div",
 				key: state.activeElementKey,
 				id: null,
@@ -62,7 +53,7 @@ const methods = state => ({
 				style: {
 					display: "block",
 					width: "100%",
-					height: Math.max(6, state.pointer.y - offset - resizeOffset),
+					height: Math.max(ELEMENT_MIN_HEIGHT, state.pointer.y - offset - RESIZE_OFFSET),
 				},
 				hasFocus: true,
 				focusState: {
@@ -71,39 +62,69 @@ const methods = state => ({
 					resizeBottom: true, // TODO
 					resizeLeft: false,
 				},
-			})
+			}
+			state.elements.push(activeElement)
+			state.showSnapToEdge = state.layout.height - (activeElement.style.height + offset) < SNAP_TO_EDGE_SIZE
 		}
 	},
 	pointerUp() {
 		state.pointer.down = false
+
+		if (state.showSnapToEdge) {
+			const activeElement = state.elements.find(each => each.key === state.activeElementKey)
+			if (activeElement) {
+				activeElement.style.height = state.layout.height // TODO: Use height: 100%.
+			}
+			state.showSnapToEdge = false
+		}
+	},
+
+	/*
+	 * Key down
+	 */
+	keyDownBackspace() {
+		// NOTE: No such state.keyboard.backspace.
+		if (state.activeElementKey) {
+			const x = state.elements.findIndex(each => each.key === state.activeElementKey)
+			if (x >= 0) {
+				state.elements.splice(x, 1)
+				state.activeElementKey = null
+			}
+		}
 	},
 
 	keyDownShiftKey() {
 		state.keyboard.shiftKey = true
 	},
-	keyDownCtrlKey() {
-		state.keyboard.ctrlKey = true
-	},
-	keyDownAltKey() {
-		state.keyboard.altKey = true
-	},
-	keyDownMetaKey() {
-		state.keyboard.metaKey = true
-	},
+	// keyDownCtrlKey() {
+	// 	state.keyboard.ctrlKey = true
+	// },
+	// keyDownAltKey() {
+	// 	state.keyboard.altKey = true
+	// },
+	// keyDownMetaKey() {
+	// 	state.keyboard.metaKey = true
+	// },
 
+	/*
+	 * Key up
+	 */
 	keyUpShiftKey() {
 		state.keyboard.shiftKey = false
 	},
-	keyUpCtrlKey() {
-		state.keyboard.ctrlKey = false
-	},
-	keyUpAltKey() {
-		state.keyboard.altKey = false
-	},
-	keyUpMetaKey() {
-		state.keyboard.metaKey = false
-	},
+	// keyUpCtrlKey() {
+	// 	state.keyboard.ctrlKey = false
+	// },
+	// keyUpAltKey() {
+	// 	state.keyboard.altKey = false
+	// },
+	// keyUpMetaKey() {
+	// 	state.keyboard.metaKey = false
+	// },
 
+	/*
+	 * Focus
+	 */
 	focusActiveElementByKey(key) {
 		state.activeElementKey = key
 		const activeElement = state.elements.find(each => each.key === state.activeElementKey)
@@ -143,10 +164,10 @@ const methods = state => ({
 })
 
 const initialState = {
-	// window: {
-	// 	width: 0,
-	// 	height: 0,
-	// },
+	layout: {
+		width: 0,
+		height: 0,
+	},
 	pointer: {
 		down: false,
 		x: 0,
@@ -160,6 +181,7 @@ const initialState = {
 	},
 	activeElementKey: "",
 	elements: [],
+	showSnapToEdge: false,
 }
 
 export default function useSorceryReducer() {
