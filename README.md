@@ -25,7 +25,7 @@ _Explores UX concepts for creating, resizing, and deleting block elements._
 - [x] Can we create _many_ elements?
 - [x] Can we focus an element?
 - [x] Can we focus an element’s handle bar?
-- [x] Can we use an element’s handle bar to resize an element?
+- [x] Can we resize an element?
 - [x] Can we focus and delete an element?
 - [x] Can we quantize values? (e.g. `shift`)
 - [x] Can we snap-to-edge for `height: 100%;`?
@@ -34,6 +34,8 @@ _Explores UX concepts for creating, resizing, and deleting block elements._
 
 _Explores configurable properties for block elements._
 
+- [ ] Can we resize an element? (top _and_ bottom)
+- [ ] Can we add margin to an element?
 - [ ] Can we add margin to an element?
 - [ ] Can we add negative margin to an element?
 - [ ] Can we control the margin between two elements naturally?
