@@ -9,14 +9,10 @@ import useMethods from "use-methods"
 // 	left: false,
 // },
 
-const resizeOffset = 6 + 6 / 2
+const ELEMENT_MIN_HEIGHT = 6
+const RESIZE_OFFSET = 6 + 6 / 2
 
 const methods = state => ({
-	// resize({ width, height }) {
-	// 	state.window.width = width
-	// 	state.window.height = height
-	// },
-
 	pointerMove({ x, y }) {
 		state.pointer.x = Math.round(x)
 		state.pointer.y = Math.round(y)
@@ -31,7 +27,7 @@ const methods = state => ({
 			// TODO: Too many guards?
 			if (activeElement && activeElement.hasFocus && activeElement.focusState.resizeBottom) {
 				const offset = state.elements.slice(0, x).reduce((acc, each) => acc + each.style.height, 0)
-				activeElement.style.height = Math.max(6, transform(state.pointer.y - offset - resizeOffset))
+				activeElement.style.height = Math.max(ELEMENT_MIN_HEIGHT, transform(state.pointer.y - offset - RESIZE_OFFSET))
 			}
 		}
 
@@ -62,7 +58,7 @@ const methods = state => ({
 				style: {
 					display: "block",
 					width: "100%",
-					height: Math.max(6, state.pointer.y - offset - resizeOffset),
+					height: Math.max(ELEMENT_MIN_HEIGHT, state.pointer.y - offset - RESIZE_OFFSET),
 				},
 				hasFocus: true,
 				focusState: {
@@ -143,10 +139,6 @@ const methods = state => ({
 })
 
 const initialState = {
-	// window: {
-	// 	width: 0,
-	// 	height: 0,
-	// },
 	pointer: {
 		down: false,
 		x: 0,
