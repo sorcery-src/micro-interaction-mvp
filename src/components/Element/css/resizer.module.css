@@ -1,0 +1,35 @@
+.absolute {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 50;
+}
+.resizerTabIndex {
+	/* prettier-ignore */
+	padding:
+		calc(6 / 16 * 1rem)
+		calc(6 / 16 * 1rem)
+		calc(6 / 16 * 1rem)
+		calc(6 / 16 * 1rem);
+}
+.resizerTabIndex:focus {
+	outline: none;
+}
+.resizer {
+	width: calc(72 / 16 * 1rem);
+	height: calc(6 / 16 * 1rem);
+	background-color: hsl(195, 100%, 90%);
+	border-radius: 9999px;
+}
+.resizerTabIndex[data-has-focus="true"] .resizer {
+	background-color: hsl(195, 100%, 75%);
+	/* prettier-ignore */
+	transition:
+		background-color,
+		100ms,
+		ease-out;
+}

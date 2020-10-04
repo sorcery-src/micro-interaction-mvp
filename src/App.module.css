@@ -1,0 +1,6 @@
+.appTabIndex {
+	min-height: 100vh;
+}
+.appTabIndex:focus {
+	outline: none;
+}

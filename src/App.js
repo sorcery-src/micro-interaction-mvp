@@ -2,17 +2,12 @@
 
 import * as React from "react"
 
-import AbsoluteGitHubCallout from "AbsoluteGitHubCallout"
-import DebugState from "DebugState"
-import Element from "Element"
-import StyleOnce from "lib/CSS/StyleOnce"
-import createID from "utils/createID"
-import css from "lib/x/tpl"
-import px from "lib/CSS/px"
-import useSorceryReducer from "useSorceryReducer2"
-
-const appAreaID = createID()
-const snapToEdgeID = createID()
+import AbsoluteGitHubCallout from "components/AbsoluteGitHubCallout"
+import DebugState from "components/DebugState"
+import Element from "components/Element"
+import SnapToEdgeHighlight from "components/SnapToEdgeHighlight"
+import styles from "./App.module.css"
+import useSorceryReducer from "reducers/useSorceryReducer"
 
 export default function App() {
 	const [state, dispatch] = useSorceryReducer()
@@ -40,7 +35,7 @@ export default function App() {
 			return
 		}
 		const id = window.requestAnimationFrame(() => {
-			const element = document.getElementById(state.activeElementKey)
+			const element = document.querySelector(`[data-key="${state.activeElementKey}"]`)
 			element.focus()
 		})
 		return () => {
@@ -50,23 +45,10 @@ export default function App() {
 
 	return (
 		<>
-			{/**/}
-
 			<AbsoluteGitHubCallout />
 
-			<StyleOnce id={appAreaID}>
-				{css`
-					.appAreaTabIndex__${appAreaID} {
-						min-height: 100vh;
-					}
-					.appAreaTabIndex__${appAreaID}:focus {
-						outline: none;
-					}
-				`}
-			</StyleOnce>
-
 			<div
-				className={`appAreaTabIndex__${appAreaID}`}
+				className={styles.appTabIndex}
 				onPointerMove={e => {
 					dispatch.pointerMove({
 						x: e.clientX,
@@ -83,24 +65,12 @@ export default function App() {
 
 					if (e.key === "Shift") {
 						dispatch.keyDownShiftKey()
-					} // else if (e.key === "Control") {
-					// 	dispatch.keyDownCtrlKey()
-					// } else if (e.key === "Alt") {
-					// 	dispatch.keyDownAltKey()
-					// } else if (e.key === "Meta") {
-					// 	dispatch.keyDownMetaKey()
-					// }
+					}
 				}}
 				onKeyUp={e => {
 					if (e.key === "Shift") {
 						dispatch.keyUpShiftKey()
-					} // else if (e.key === "Control") {
-					// 	dispatch.keyUpCtrlKey()
-					// } else if (e.key === "Alt") {
-					// 	dispatch.keyUpAltKey()
-					// } else if (e.key === "Meta") {
-					// 	dispatch.keyUpMetaKey()
-					// }
+					}
 				}}
 				tabIndex={0}
 			>
@@ -109,43 +79,9 @@ export default function App() {
 				))}
 			</div>
 
-			{state.showSnapToEdge && (
-				<>
-					{/**/}
-
-					<StyleOnce id={snapToEdgeID}>
-						{css`
-							.absolute__${snapToEdgeID} {
-								position: absolute;
-								right: 0;
-								bottom: 0;
-								left: 0;
-							}
-							.center__${snapToEdgeID} {
-								display: flex;
-								justify-content: center;
-							}
-							.snapToEdge__${snapToEdgeID} {
-								width: 100%;
-								height: ${px(4)};
-								background-color: hsl(${3.25 * 60}, 100%, 75%);
-							}
-						`}
-					</StyleOnce>
-
-					<div className={`absolute__${snapToEdgeID}`}>
-						<div className={`center__${snapToEdgeID}`}>
-							<div className={`snapToEdge__${snapToEdgeID}`} />
-						</div>
-					</div>
-
-					{/**/}
-				</>
-			)}
+			{state.showSnapToEdgeHighlight && <SnapToEdgeHighlight />}
 
 			<DebugState state={state} />
-
-			{/**/}
 		</>
 	)
 }
