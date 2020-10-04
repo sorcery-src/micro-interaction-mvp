@@ -2,17 +2,19 @@ import createID from "utils/createID"
 import quantize from "utils/quantize"
 import useMethods from "use-methods"
 
-// hints: {
-// 	top: false,
-// 	right: false,
-// 	bottom: false,
-// 	left: false,
-// },
-
 const ELEMENT_MIN_HEIGHT = 6
 const RESIZE_OFFSET = 6 + 6 / 2
+const SNAP_TO_EDGE_SIZE = 64
 
 const methods = state => ({
+	/*
+	 * Layout
+	 */
+	updateLayout({ width, height }) {
+		state.layout.width = width
+		state.layout.height = height
+	},
+
 	/*
 	 * Pointer
 	 */
@@ -20,26 +22,16 @@ const methods = state => ({
 		state.pointer.x = Math.round(x)
 		state.pointer.y = Math.round(y)
 
-		// let offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
-		// 	offset += activeElement.style.height
-
 		const transform = !state.keyboard.shiftKey ? n => n : quantize
 		if (state.pointer.down && state.activeElementKey) {
 			const x = state.elements.findIndex(each => each.key === state.activeElementKey)
 			const activeElement = state.elements[x]
-			// TODO: Too many guards?
-			if (activeElement && activeElement.hasFocus && activeElement.focusState.resizeBottom) {
+			if (activeElement && activeElement.focusState.resizeBottom) {
 				const offset = state.elements.slice(0, x).reduce((acc, each) => acc + each.style.height, 0)
 				activeElement.style.height = Math.max(ELEMENT_MIN_HEIGHT, transform(state.pointer.y - offset - RESIZE_OFFSET))
+				state.showSnapToEdge = state.layout.height - (activeElement.style.height + offset) < SNAP_TO_EDGE_SIZE
 			}
 		}
-
-		// if (state.pointer.down) {
-		// 	const element = state.elements.find(each => (each.key = state.activeElementKey))
-		// 	if (element) {
-		// 		element.style.height = state.pointer.y
-		// 	}
-		// }
 	},
 	pointerDown() {
 		state.pointer.down = true
@@ -51,9 +43,9 @@ const methods = state => ({
 		}
 
 		if (!state.activeElementKey) {
-			state.activeElementKey = createID()
 			const offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
-			state.elements.push({
+			state.activeElementKey = createID()
+			const activeElement = {
 				tag: "div",
 				key: state.activeElementKey,
 				id: null,
@@ -70,11 +62,21 @@ const methods = state => ({
 					resizeBottom: true, // TODO
 					resizeLeft: false,
 				},
-			})
+			}
+			state.elements.push(activeElement)
+			state.showSnapToEdge = state.layout.height - (activeElement.style.height + offset) < SNAP_TO_EDGE_SIZE
 		}
 	},
 	pointerUp() {
 		state.pointer.down = false
+
+		if (state.showSnapToEdge) {
+			const activeElement = state.elements.find(each => each.key === state.activeElementKey)
+			if (activeElement) {
+				activeElement.style.height = state.layout.height // TODO: Use height: 100%.
+			}
+			state.showSnapToEdge = false
+		}
 	},
 
 	/*
@@ -94,15 +96,15 @@ const methods = state => ({
 	keyDownShiftKey() {
 		state.keyboard.shiftKey = true
 	},
-	keyDownCtrlKey() {
-		state.keyboard.ctrlKey = true
-	},
-	keyDownAltKey() {
-		state.keyboard.altKey = true
-	},
-	keyDownMetaKey() {
-		state.keyboard.metaKey = true
-	},
+	// keyDownCtrlKey() {
+	// 	state.keyboard.ctrlKey = true
+	// },
+	// keyDownAltKey() {
+	// 	state.keyboard.altKey = true
+	// },
+	// keyDownMetaKey() {
+	// 	state.keyboard.metaKey = true
+	// },
 
 	/*
 	 * Key up
@@ -110,15 +112,15 @@ const methods = state => ({
 	keyUpShiftKey() {
 		state.keyboard.shiftKey = false
 	},
-	keyUpCtrlKey() {
-		state.keyboard.ctrlKey = false
-	},
-	keyUpAltKey() {
-		state.keyboard.altKey = false
-	},
-	keyUpMetaKey() {
-		state.keyboard.metaKey = false
-	},
+	// keyUpCtrlKey() {
+	// 	state.keyboard.ctrlKey = false
+	// },
+	// keyUpAltKey() {
+	// 	state.keyboard.altKey = false
+	// },
+	// keyUpMetaKey() {
+	// 	state.keyboard.metaKey = false
+	// },
 
 	/*
 	 * Focus
@@ -162,6 +164,10 @@ const methods = state => ({
 })
 
 const initialState = {
+	layout: {
+		width: 0,
+		height: 0,
+	},
 	pointer: {
 		down: false,
 		x: 0,
@@ -175,6 +181,7 @@ const initialState = {
 	},
 	activeElementKey: "",
 	elements: [],
+	showSnapToEdge: false,
 }
 
 export default function useSorceryReducer() {
