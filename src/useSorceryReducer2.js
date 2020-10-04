@@ -12,10 +12,10 @@ import useMethods from "use-methods"
 const resizeOffset = 6 + 6 / 2
 
 const methods = state => ({
-	resize({ width, height }) {
-		state.window.width = width
-		state.window.height = height
-	},
+	// resize({ width, height }) {
+	// 	state.window.width = width
+	// 	state.window.height = height
+	// },
 
 	pointerMove({ x, y }) {
 		state.pointer.x = Math.round(x)
@@ -143,10 +143,10 @@ const methods = state => ({
 })
 
 const initialState = {
-	window: {
-		width: 0,
-		height: 0,
-	},
+	// window: {
+	// 	width: 0,
+	// 	height: 0,
+	// },
 	pointer: {
 		down: false,
 		x: 0,

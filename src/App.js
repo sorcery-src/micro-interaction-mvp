@@ -10,41 +10,6 @@ import useSorceryReducer from "useSorceryReducer2"
 export default function App() {
 	const [state, dispatch] = useSorceryReducer()
 
-	// state.window
-	React.useEffect(() => {
-		const handler = e => {
-			const width = window.innerWidth
-			const height = window.innerHeight
-			dispatch.resize({
-				width,
-				height,
-			})
-		}
-		handler() // Once
-		window.addEventListener("resize", handler, false)
-		return () => {
-			window.removeEventListener("resize", handler, false)
-		}
-	}, [dispatch])
-
-	// state.pointer
-	React.useEffect(() => {
-		const handlerPointerMove = e => {
-			dispatch.pointerMove({
-				x: e.clientX,
-				y: e.clientY,
-			})
-		}
-		window.addEventListener("pointermove", handlerPointerMove, false)
-		window.addEventListener("pointerdown", dispatch.pointerDown, false)
-		window.addEventListener("pointerup", dispatch.pointerUp, false)
-		return () => {
-			window.removeEventListener("pointermove", handlerPointerMove, false)
-			window.removeEventListener("pointerdown", dispatch.pointerDown, false)
-			window.removeEventListener("pointerup", dispatch.pointerUp, false)
-		}
-	}, [dispatch])
-
 	// state.keyboard
 	React.useEffect(() => {
 		const keyDownHandler = e => {
@@ -78,10 +43,17 @@ export default function App() {
 	}, [dispatch])
 
 	// Focuses state.activeElementKey.
-	React.useEffect(() => {
-		if (state.activeElementKey) {
+	React.useLayoutEffect(() => {
+		if (!state.activeElementKey) {
+			// No-op
+			return
+		}
+		const id = window.requestAnimationFrame(() => {
 			const element = document.getElementById(state.activeElementKey)
 			element.focus()
+		})
+		return () => {
+			window.cancelAnimationFrame(id)
 		}
 	}, [state.activeElementKey])
 
@@ -91,9 +63,21 @@ export default function App() {
 
 			<AbsoluteGitHubCallout />
 
-			{state.elements.map(each => (
-				<Element key={each.key} element={each} dispatch={dispatch} />
-			))}
+			<div
+				style={{ minHeight: "100vh" }}
+				onPointerMove={e => {
+					dispatch.pointerMove({
+						x: e.clientX,
+						y: e.clientY,
+					})
+				}}
+				onPointerDown={dispatch.pointerDown}
+				onPointerUp={dispatch.pointerUp}
+			>
+				{state.elements.map(each => (
+					<Element key={each.key} element={each} dispatch={dispatch} />
+				))}
+			</div>
 
 			<DebugState state={state} />
 
