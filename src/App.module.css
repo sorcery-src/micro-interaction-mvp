@@ -1,6 +1,6 @@
-.appAreaTabIndex {
+.appTabIndex {
 	min-height: 100vh;
 }
-.appAreaTabIndex:focus {
+.appTabIndex:focus {
 	outline: none;
 }

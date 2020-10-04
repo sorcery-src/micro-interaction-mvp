@@ -1,5 +1,5 @@
 import React from "react"
-import SVGGitHubCallout from "SVGGitHubCallout"
+import SVGGitHubCallout from "./SVGGitHubCallout"
 import styles from "./index.module.css"
 
 // TODO: Add {...target_blank}.

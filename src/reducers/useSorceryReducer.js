@@ -1,10 +1,20 @@
-import createID from "utils/createID"
 import quantize from "utils/quantize"
 import useMethods from "use-methods"
+import { v4 as uuid } from "uuid"
 
 const ELEMENT_MIN_HEIGHT = 6
 const RESIZE_OFFSET = 6 + 6 / 2
 const SNAP_TO_EDGE_SIZE = 64
+
+// Creates a new 6-character ID (UUID).
+//
+// Ex:
+//
+// newID() // abc123
+//
+function newID() {
+	return uuid().slice(0, 6)
+}
 
 const methods = state => ({
 	/*
@@ -44,7 +54,7 @@ const methods = state => ({
 
 		if (!state.activeElementKey) {
 			const offset = state.elements.reduce((acc, each) => acc + each.style.height, 0)
-			state.activeElementKey = createID()
+			state.activeElementKey = newID()
 			const activeElement = {
 				tag: "div",
 				key: state.activeElementKey,

@@ -2,12 +2,12 @@
 
 import * as React from "react"
 
-import AbsoluteGitHubCallout from "AbsoluteGitHubCallout"
-import DebugState from "DebugState"
-import Element from "Element"
-import SnapToEdgeHighlight from "SnapToEdgeHighlight"
+import AbsoluteGitHubCallout from "components/AbsoluteGitHubCallout"
+import DebugState from "components/DebugState"
+import Element from "components/Element"
+import SnapToEdgeHighlight from "components/SnapToEdgeHighlight"
 import styles from "./App.module.css"
-import useSorceryReducer from "useSorceryReducer2"
+import useSorceryReducer from "reducers/useSorceryReducer"
 
 export default function App() {
 	const [state, dispatch] = useSorceryReducer()
@@ -35,7 +35,7 @@ export default function App() {
 			return
 		}
 		const id = window.requestAnimationFrame(() => {
-			const element = document.getElementById(state.activeElementKey)
+			const element = document.querySelector(`[data-key="${state.activeElementKey}"]`)
 			element.focus()
 		})
 		return () => {
@@ -48,7 +48,7 @@ export default function App() {
 			<AbsoluteGitHubCallout />
 
 			<div
-				className={styles.appAreaTabIndex}
+				className={styles.appTabIndex}
 				onPointerMove={e => {
 					dispatch.pointerMove({
 						x: e.clientX,
