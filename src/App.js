@@ -83,24 +83,12 @@ export default function App() {
 
 					if (e.key === "Shift") {
 						dispatch.keyDownShiftKey()
-					} // else if (e.key === "Control") {
-					// 	dispatch.keyDownCtrlKey()
-					// } else if (e.key === "Alt") {
-					// 	dispatch.keyDownAltKey()
-					// } else if (e.key === "Meta") {
-					// 	dispatch.keyDownMetaKey()
-					// }
+					}
 				}}
 				onKeyUp={e => {
 					if (e.key === "Shift") {
 						dispatch.keyUpShiftKey()
-					} // else if (e.key === "Control") {
-					// 	dispatch.keyUpCtrlKey()
-					// } else if (e.key === "Alt") {
-					// 	dispatch.keyUpAltKey()
-					// } else if (e.key === "Meta") {
-					// 	dispatch.keyUpMetaKey()
-					// }
+					}
 				}}
 				tabIndex={0}
 			>

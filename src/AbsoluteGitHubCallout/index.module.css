@@ -1,0 +1,9 @@
+.absolute {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 100;
+}
+.svg {
+	color: hsl(0, 0%, 0%);
+}
