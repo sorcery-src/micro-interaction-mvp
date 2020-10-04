@@ -1,4 +1,5 @@
 import createID from "utils/createID"
+import quantize from "utils/quantize"
 import useMethods from "use-methods"
 
 // hints: {
@@ -18,12 +19,13 @@ const methods = state => ({
 		state.pointer.x = Math.round(x)
 		state.pointer.y = Math.round(y)
 
+		const transform = !state.keyboard.shiftKey ? n => n : quantize
 		if (state.pointer.down && state.activeElementKey) {
 			const activeElement = state.elements.find(each => each.key === state.activeElementKey)
 			// TODO: Deprecate activeElement.hasFocus?
 			if (activeElement && activeElement.hasFocus && activeElement.focusState.resizeBottom) {
 				// TODO
-				activeElement.style.height = state.pointer.y
+				activeElement.style.height = transform(state.pointer.y)
 			}
 		}
 
