@@ -10,38 +10,6 @@ import useSorceryReducer from "useSorceryReducer2"
 export default function App() {
 	const [state, dispatch] = useSorceryReducer()
 
-	// state.keyboard
-	React.useEffect(() => {
-		const keyDownHandler = e => {
-			if (e.key === "Shift") {
-				dispatch.keyDownShiftKey()
-			} else if (e.key === "Control") {
-				dispatch.keyDownCtrlKey()
-			} else if (e.key === "Alt") {
-				dispatch.keyDownAltKey()
-			} else if (e.key === "Meta") {
-				dispatch.keyDownMetaKey()
-			}
-		}
-		const keyUpHandler = e => {
-			if (e.key === "Shift") {
-				dispatch.keyUpShiftKey()
-			} else if (e.key === "Control") {
-				dispatch.keyUpCtrlKey()
-			} else if (e.key === "Alt") {
-				dispatch.keyUpAltKey()
-			} else if (e.key === "Meta") {
-				dispatch.keyUpMetaKey()
-			}
-		}
-		window.addEventListener("keydown", keyDownHandler, false)
-		window.addEventListener("keyup", keyUpHandler, false)
-		return () => {
-			window.removeEventListener("keydown", keyDownHandler, false)
-			window.removeEventListener("keyup", keyUpHandler, false)
-		}
-	}, [dispatch])
-
 	// Focuses state.activeElementKey.
 	React.useLayoutEffect(() => {
 		if (!state.activeElementKey) {
@@ -64,6 +32,7 @@ export default function App() {
 			<AbsoluteGitHubCallout />
 
 			<div
+				id="appArea"
 				style={{ minHeight: "100vh" }}
 				onPointerMove={e => {
 					dispatch.pointerMove({
@@ -73,6 +42,29 @@ export default function App() {
 				}}
 				onPointerDown={dispatch.pointerDown}
 				onPointerUp={dispatch.pointerUp}
+				onKeyDown={e => {
+					if (e.key === "Shift") {
+						dispatch.keyDownShiftKey()
+					} else if (e.key === "Control") {
+						dispatch.keyDownCtrlKey()
+					} else if (e.key === "Alt") {
+						dispatch.keyDownAltKey()
+					} else if (e.key === "Meta") {
+						dispatch.keyDownMetaKey()
+					}
+				}}
+				onKeyUp={e => {
+					if (e.key === "Shift") {
+						dispatch.keyUpShiftKey()
+					} else if (e.key === "Control") {
+						dispatch.keyUpCtrlKey()
+					} else if (e.key === "Alt") {
+						dispatch.keyUpAltKey()
+					} else if (e.key === "Meta") {
+						dispatch.keyUpMetaKey()
+					}
+				}}
+				tabIndex={0}
 			>
 				{state.elements.map(each => (
 					<Element key={each.key} element={each} dispatch={dispatch} />
