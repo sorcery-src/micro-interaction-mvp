@@ -48,13 +48,15 @@ const methods = state => ({
 					width: "100%",
 					height: state.pointer.y,
 				},
-				focusState: {
-					element: true,
-					resizeTop: false,
-					resizeRight: false,
-					resizeBottom: true,
-					resizeLeft: false,
-				},
+				hasFocus: true,
+
+				// focusState: {
+				// 	element: true,
+				// 	resizeTop: false,
+				// 	resizeRight: false,
+				// 	resizeBottom: true,
+				// 	resizeLeft: false,
+				// },
 			})
 		}
 	},
@@ -93,10 +95,19 @@ const methods = state => ({
 
 		const activeElement = state.elements.find(each => each.key === state.activeElementKey)
 		if (activeElement) {
-			activeElement.focusState.element = true
+			activeElement.hasFocus = true
 		}
 	},
-	blurActiveElement() {
+	blurActiveElementByKey(key) {
+		const activeElement = state.elements.find(each => each.key === key)
+		if (activeElement) {
+			activeElement.hasFocus = false
+			// for (const k in activeElement.focusState) {
+			// 	activeElement.focusState[k] = false
+			// }
+		}
+
+		// (Reverse order)
 		state.activeElementKey = ""
 	},
 })

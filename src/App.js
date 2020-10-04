@@ -79,16 +79,14 @@ function Element({ element, dispatch }) {
 				id={element.key} // TODO?
 				style={element.style}
 				onFocus={() => dispatch.focusActiveElementByKey(element.key)}
-				onBlur={dispatch.blurActiveElement}
-				onFocus={() => console.log("a")}
-				onBlur={() => console.log("b")}
+				onBlur={() => dispatch.blurActiveElementByKey(element.key)}
 				data-element={elementID}
 				tabIndex={0}
 			>
 				<div style={{ position: "relative", height: "100%" }}>
 					{/**/}
 
-					{element.focusState.resizeBottom && (
+					{element.hasFocus && (
 						<>
 							<StyleOnce id={resizeElementID}>
 								{css`
