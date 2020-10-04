@@ -1,10 +1,5 @@
 .absolute {
-	/* prettier-ignore */
-	padding:
-		calc(12 / 16 * 1rem)
-		calc(12 / 16 * 1rem)
-		calc(12 / 16 * 1rem)
-		calc(12 / 16 * 1rem);
+	padding: calc(12 / 16 * 1rem);
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -13,9 +8,5 @@
 .text {
 	white-space: pre;
 	tab-size: 2;
-	/* prettier-ignore */
-	font:
-		calc(14 / 16 * 1rem) /
-		1.25
-		monospace;
+	font: calc(12 / 16 * 1rem) / 1.25 Monaco, monospace;
 }
