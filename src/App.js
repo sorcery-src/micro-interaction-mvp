@@ -55,6 +55,7 @@ import useSorceryReducer from "useSorceryReducer2"
 // )
 
 const elementID = createID()
+const resizeElementID = createID()
 
 function Element({ element, dispatch }) {
 	return (
@@ -86,6 +87,55 @@ function Element({ element, dispatch }) {
 			>
 				<div style={{ position: "relative", height: "100%" }}>
 					{/**/}
+
+					{element.focusState.resizeBottom && (
+						<>
+							<StyleOnce id={resizeElementID}>
+								{css`
+									.absolute__${resizeElementID} {
+										position: absolute;
+										top: 100%;
+										right: 0;
+										left: 0;
+										display: flex;
+										justify-content: center;
+										align-items: center;
+									}
+									.resizerTabIndex__${resizeElementID} {
+										padding-top: ${px(6)};
+										padding-right: ${px(6)};
+										padding-bottom: ${px(6)};
+										padding-left: ${px(6)};
+									}
+									.resizerTabIndex__${resizeElementID}:focus {
+										outline: none;
+										/* TODO */
+									}
+									.resizer__${resizeElementID} {
+										width: ${px(72)};
+										height: ${px(6)};
+										border-radius: 9999px;
+										background-color: hsl(${3.25 * 60}, 100%, 90%);
+									}
+									.resizerTabIndex__${resizeElementID}[data-focus="true"] .resizer__${resizeElementID} {
+										background-color: hsl(${3.25 * 60}, 100%, 75%);
+									}
+								`}
+							</StyleOnce>
+
+							<div className={`absolute__${resizeElementID}`}>
+								<div
+									className={`resizerTabIndex__${resizeElementID}`}
+									// onFocus={dispatch.focusActiveElementresizer}
+									// onBlur={dispatch.blurActiveElementresizer}
+									// data-focus={state.activeElement.focusState.resizer}
+									tabIndex={0}
+								>
+									<div className={`resizer__${resizeElementID}`} />
+								</div>
+							</div>
+						</>
+					)}
 
 					<DebugElement element={element} />
 
@@ -196,163 +246,30 @@ export default function App() {
 			{/**/}
 		</>
 	)
-
-	// return (
-	// 	<>
-	// 		{/**/}
-	//
-	// 		<AbsoluteGitHubCallout />
-	//
-	// 		<div
-	// 			style={{ height: "100vh" }}
-	// 			onPointerDown={dispatch.handlePointerDown}
-	// 			onPointerMove={e => {
-	// 				dispatch.handlePointerMove({
-	// 					x: Math.round(e.clientX),
-	// 					y: Math.round(e.clientY),
-	// 				})
-	// 			}}
-	// 			onPointerUp={dispatch.handlePointerUp}
-	// 		>
-	// 			{state.activeElement && (
-	// 				<>
-	// 					{/**/}
-	//
-	// 					{/* activeElement */}
-	// 					<StyleOnce id={activeElementID}>
-	// 						{css`
-	// 							.activeElement__${activeElementID}:focus {
-	// 								outline: none;
-	// 							}
-	// 							.activeElement__${activeElementID}[data-focus="false"] {
-	// 								background-color: hsl(${3.25 * 60}, 100%, 90%);
-	// 								transition-property: background-color;
-	// 								transition-duration: 100ms;
-	// 								transition-timing-function: ease-out;
-	// 							}
-	// 							.activeElement__${activeElementID}[data-focus="true"] {
-	// 								background-color: hsl(${3.25 * 60}, 100%, 75%);
-	// 								transition-property: background-color;
-	// 								transition-duration: 50ms;
-	// 								transition-timing-function: ease-out;
-	// 							}
-	// 						`}
-	// 					</StyleOnce>
-	//
-	// 					<div
-	// 						className={`activeElement__${activeElementID}`}
-	// 						style={state.activeElement.style}
-	// 						onFocus={dispatch.focusActiveElement}
-	// 						onBlur={e => {
-	// 							if (!e.target.contains(e.relatedTarget)) {
-	// 								dispatch.blurActiveElement()
-	// 							}
-	// 						}}
-	// 						data-focus={state.activeElement.focusState.element}
-	// 						tabIndex={0}
-	// 					>
-	// 						<div style={{ position: "relative", height: "100%" }}>
-	// 							{/**/}
-	//
-	// 							{/* debugActiveElement */}
-	// 							<DebugActiveElement activeElement={state.activeElement} />
-	//
-	// 							{/* activeElement */}
-	// 							{state.activeElement.focusState.element && (
-	// 								<>
-	// 									<StyleOnce id={handleBarID}>
-	// 										{css`
-	// 											.absolute__${handleBarID} {
-	// 												position: absolute;
-	// 												top: 100%;
-	// 												right: 0;
-	// 												left: 0;
-	// 												display: flex;
-	// 												justify-content: center;
-	// 												align-items: center;
-	// 											}
-	// 											.handleBarHitArea__${handleBarID} {
-	// 												padding-top: ${px(6)};
-	// 												padding-right: ${px(6)};
-	// 												padding-bottom: ${px(6)};
-	// 												padding-left: ${px(6)};
-	// 											}
-	// 											.handleBarHitArea__${handleBarID}:focus {
-	// 												outline: none;
-	// 											}
-	// 											.handleBar__${handleBarID} {
-	// 												width: ${px(72)};
-	// 												height: ${px(6)};
-	// 												border-radius: 9999px;
-	// 												background-color: hsl(${3.25 * 60}, 100%, 90%);
-	// 											}
-	// 											.handleBarHitArea__${handleBarID}[data-focus="true"] .handleBar__${handleBarID} {
-	// 												background-color: hsl(${3.25 * 60}, 100%, 75%);
-	// 											}
-	// 										`}
-	// 									</StyleOnce>
-	//
-	// 									<div className={`absolute__${handleBarID}`}>
-	// 										<div
-	// 											className={`handleBarHitArea__${handleBarID}`}
-	// 											onFocus={dispatch.focusActiveElementHandleBar}
-	// 											onBlur={dispatch.blurActiveElementHandleBar}
-	// 											data-focus={state.activeElement.focusState.handleBar}
-	// 											tabIndex={0}
-	// 										>
-	// 											<div className={`handleBar__${handleBarID}`} />
-	// 										</div>
-	// 									</div>
-	// 								</>
-	// 							)}
-	//
-	// 							{/**/}
-	// 						</div>
-	// 					</div>
-	//
-	// 					{/* snapToEdge */}
-	// 					{state.activeElement.snapToEdgeState.bottom && (
-	// 						<>
-	// 							{/**/}
-	//
-	// 							<StyleOnce id={snapToEdgeID}>
-	// 								{css`
-	// 									.absolute__${snapToEdgeID} {
-	// 										position: absolute;
-	// 										right: 0;
-	// 										bottom: 0;
-	// 										left: 0;
-	// 									}
-	// 									.center__${snapToEdgeID} {
-	// 										display: flex;
-	// 										justify-content: center;
-	// 									}
-	// 									.snapToEdge__${snapToEdgeID} {
-	// 										width: 100%;
-	// 										height: ${px(4)};
-	// 										background-color: hsl(${3.25 * 60}, 100%, 75%);
-	// 									}
-	// 								`}
-	// 							</StyleOnce>
-	//
-	// 							<div className={`absolute__${snapToEdgeID}`}>
-	// 								<div className={`center__${snapToEdgeID}`}>
-	// 									<div className={`snapToEdge__${snapToEdgeID}`} />
-	// 								</div>
-	// 							</div>
-	//
-	// 							{/**/}
-	// 						</>
-	// 					)}
-	//
-	// 					{/**/}
-	// 				</>
-	// 			)}
-	// 		</div>
-	//
-	// 		<DebugState state={state} />
-	//
-	// 		{/**/}
-	// 	</>
-	// )
 }
+
+// 	<StyleOnce id={snapToEdgeID}>
+// 		{css`
+// 			.absolute__${snapToEdgeID} {
+// 				position: absolute;
+// 				right: 0;
+// 				bottom: 0;
+// 				left: 0;
+// 			}
+// 			.center__${snapToEdgeID} {
+// 				display: flex;
+// 				justify-content: center;
+// 			}
+// 			.snapToEdge__${snapToEdgeID} {
+// 				width: 100%;
+// 				height: ${px(4)};
+// 				background-color: hsl(${3.25 * 60}, 100%, 75%);
+// 			}
+// 		`}
+// 	</StyleOnce>
+//
+// 	<div className={`absolute__${snapToEdgeID}`}>
+// 		<div className={`center__${snapToEdgeID}`}>
+// 			<div className={`snapToEdge__${snapToEdgeID}`} />
+// 		</div>
+// 	</div>
