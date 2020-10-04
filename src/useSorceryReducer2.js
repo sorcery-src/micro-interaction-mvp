@@ -9,6 +9,8 @@ import useMethods from "use-methods"
 // 	left: false,
 // },
 
+const resizeOffset = 6 + 6 / 2
+
 const methods = state => ({
 	resize({ width, height }) {
 		state.window.width = width
@@ -24,7 +26,7 @@ const methods = state => ({
 			const activeElement = state.elements.find(each => each.key === state.activeElementKey)
 			// TODO: Too many guards.
 			if (activeElement && activeElement.hasFocus && activeElement.focusState.resizeBottom) {
-				activeElement.style.height = transform(state.pointer.y)
+				activeElement.style.height = transform(state.pointer.y - resizeOffset)
 			}
 		}
 
@@ -49,7 +51,7 @@ const methods = state => ({
 				style: {
 					display: "block",
 					width: "100%",
-					height: state.pointer.y,
+					height: state.pointer.y - resizeOffset,
 				},
 				hasFocus: true,
 				focusState: {
